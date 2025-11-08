@@ -1,0 +1,18 @@
+/* Базовые стили для сайта */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f7f7f7;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #000000;
+}
+
+img {
+  border-radius: 10px;
+  display: block;
+  margin-top: 10px;
+}
