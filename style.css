@@ -1,18 +1,103 @@
 /* Базовые стили для сайта */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f7f7f7;
-  color: #333;
+  font-family: Inter, Arial, sans-serif;
+  background-color: #161616;
+  color: #ffffff;
   margin: 0;
   padding: 20px;
+  font-size: 16px;
+  min-width: 320px;
 }
+
+h1, h2, p {
+  text-box: trim-both cap alphabetic;
+  padding: 0px;
+  margin: 0px;
+}
+
 
 h1 {
-  color: #000000;
+  font-size: 48px;
+  margin: 0.6em 0 0.4em;
+  line-height: 1em;
 }
 
-img {
-  border-radius: 10px;
+h2 {
+  font-size: 24px;
+}
+
+
+
+
+
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr); /* 12 равных колонок */
+  gap: 20px; /* отступы между колонками */
+  max-width: 1400px;
+  margin: 0 auto 4em;
+  box-sizing: border-box; /* чтобы ширина контейнера учитывала отступы */
+}
+
+/* Классы для ширины */
+[class^="col-"] {
+  /* background: #565656; */
+  box-sizing: border-box;
+}
+
+[class^="col-"] img {
+  width: 100%;        /* растягивается на всю ширину блока */
+  height: auto;       /* сохраняет пропорции */
   display: block;
-  margin-top: 10px;
+  object-fit: cover;   /* заполняет блок без искажений */
+  object-position: center; /* центрирует картинку */
+
+}
+
+/* Универсальное правило: */
+.col-1 { grid-column: span 1; }
+.col-2 { grid-column: span 2; }
+.col-3 { grid-column: span 3; }
+.col-4 { grid-column: span 4; }
+.col-5 { grid-column: span 5; }
+.col-6 { grid-column: span 6; }
+.col-7 { grid-column: span 7; }
+.col-8 { grid-column: span 8; }
+.col-9 { grid-column: span 9; }
+.col-10 { grid-column: span 10; }
+.col-11 { grid-column: span 11; }
+.col-12 { grid-column: span 12; }
+
+/* ограничение максимальной высоты картинки при блоке на 12 колонок */
+.col-12 img {
+  max-height: 700px;
+}
+
+
+@media (max-width: 1400px) {
+  h1 {
+    font-size: 32px;
+  }
+  p {
+    font-size: 14px;
+  }
+  .container {
+    margin-bottom: 3em;
+  }
+}
+
+@media (max-width: 800px) {
+  h1 {
+    font-size: 20px;
+  }
+  p {
+    font-size: 12px;
+  }
+  .container {
+    margin-bottom: 2.5em;
+  }
+  .col-12 img {
+    height: 420px;
+  }
 }
