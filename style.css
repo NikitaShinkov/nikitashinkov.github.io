@@ -1,8 +1,8 @@
 /* Базовые стили для сайта */
 body {
   font-family: Inter, Arial, sans-serif;
-  background-color: #161616;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #000000;
   margin: 0;
   padding: 20px;
   font-size: 16px;
@@ -88,13 +88,14 @@ h2 {
   max-height: 700px;
 }
 
-.temp_i10_h2t2 .col-10 img {
+.temp_i10_h2t2 .col-10 img{
   max-height: 780px;
 }
 
 
 .temp_i6h2t6_i6h2t6 .col-6 img,
 .temp_i6t6_i6t6 .col-6 img,
+.temp_i3t3x4 .col-3 img,
 .temp_s3_i3_i3_h2t3 .col-3 img,
 .temp_s3_i3_i3_t3 .col-3 img,
 .temp_i6_i3_h2t3 img,
@@ -165,14 +166,17 @@ h2 {
 
 
 .temp_i6h2t6_i6h2t6 .col-6 img,
-.temp_i6t6_i6t6 .col-6 img {
+.temp_i6t6_i6t6 .col-6 img,
+.temp_i3t3x4 .col-3 img,
+.temp_s3_i3_i3_h2t3 .col-3 img{
   max-height: 460px;
 }
 
-.temp_i6t6_i6t6 .col-6 img,
+
+
 .temp_s3_i3_i3_t3 .col-3 img,
 .temp_i6_i3_t3 .col-3 img{
-    margin-bottom: 0.8em;
+  margin-bottom: 0.8em;
 }
 
 @media (max-width: 1400px) {
@@ -236,6 +240,11 @@ h2 {
     gap: 6px;
   }
 
+  .temp_i6t6_i6t6 .col-6 img,
+  .temp_i3t3x4 .col-3 img{
+    margin-bottom: 0.8em;
+  }
+
   .temp_i8_i2x4_h1t12 .col-12,
   .temp_i8_i2x4_t12 .col-12 {
     margin-top: -6px; /* компенсация gap в grid*/
@@ -272,6 +281,11 @@ h2 {
     margin-top: 1.05em;
   }
 
+  .temp_i3t3x4 .add_margin {
+     margin-bottom: 2.5em;
+  }
+ 
+
   
 
   .temp_i12h1t12 .col-12 img, 
@@ -295,6 +309,7 @@ h2 {
   }
 
   .temp_i6t6_i6t6 .col-6 img,
+  .temp_i3t3x4 .col-3 img,
   .temp_i6_t6 .col-6 img,
   .temp_s3_i3_i3_t3 .col-3 img{
     height: 320px;
@@ -356,6 +371,8 @@ h2 {
 
   .temp_t5_i7 .col-5 { grid-column: span 12; }
   .temp_t5_i7 .col-7 { grid-column: span 12; }
+
+  .temp_i3t3x4 .col-3 { grid-column: span 6; }
 
 
   .mobile_text {
