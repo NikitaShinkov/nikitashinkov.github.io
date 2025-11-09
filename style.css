@@ -46,7 +46,7 @@ h2 {
   box-sizing: border-box; /* чтобы ширина контейнера учитывала отступы */
 }
 
-.container h1:not(:first-child) {
+.container h1 {
   margin-top: 0.8em;
 }
 
@@ -98,30 +98,30 @@ h2 {
 .temp_s3_i3_i3_h2t3 .col-3 img,
 .temp_s3_i3_i3_t3 .col-3 img,
 .temp_i6_i3_h2t3 img,
-.temp_i6_i3_t3 img{
+.temp_i6_i3_t3 img,
+.temp_i8_i2x4_h1t12 img,
+.temp_i8_i2x4_t12 img {
   height: 100%;
 }
 
-/* .temp_i8_i2x4_h1t12 .col-4, .temp_i8_i2x4_h1t12 .col-8{
-  height: 620px;
+
+.temp_i8_i2x4_h1t12,
+.temp_i8_i2x4_t12 {
+ /* grid-auto-rows: 310px;  высота одной строки */
+  grid-template-rows: 320px 320px auto; /* первые 2 строки — фиксированные, дальше авто */
 }
 
-.temp_i8_i2x4_h1t12 .col-8 img{
-  height: 100%;
-} */
-
-.temp_i8_i2x4_h1t12 .col-4 {
-  display: flex;
-  flex-direction: column; /* расположение по вертикали */
-  height: 620px;          /* общая высота контейнера */
-  gap: 20px; 
+.temp_i8_i2x4_h1t12 .col-8,
+.temp_i8_i2x4_t12 .col-8 {
+  grid-row: span 2;
 }
 
-.temp_i8_i2x4_h1t12 .col-4 * {
-  flex: 1;
-  display: flex;
-  align-items: center;    /* выравнивание контента по вертикали внутри блока */
-  justify-content: center; 
+.temp_i8_i2x4_h1t12 .col-12 {
+  margin-top: -20px; /* компенсация gap в grid*/
+}
+
+.temp_i8_i2x4_t12 .col-12 {
+  margin-top: calc(0.8em - 20px); /* компенсация gap в grid*/
 }
 
 
@@ -154,6 +154,17 @@ h2 {
   .temp_i10_h2t2 .col-10 { grid-column: span 8; }
   .temp_i10_h2t2 .col-2 { grid-column: span 4; }
 
+  .temp_i8_i2x4_h1t12,
+  .temp_i8_i2x4_t12 {
+    grid-template-rows: 200px 200px auto; /* первые 2 строки — фиксированные, дальше авто */
+  }
+  .temp_i8_i2x4_h1t12 .col-12{
+    margin-top: -10px; /* компенсация gap в grid*/
+  }
+  .temp_i8_i2x4_t12 .col-12 {
+    margin-top: calc(0.8em - 10px); /* компенсация gap в grid*/
+  }
+
 
 }
 
@@ -173,6 +184,14 @@ h2 {
   .container {
     margin-bottom: 2.5em;
     gap: 6px;
+  }
+
+  .temp_i8_i2x4_h1t12 .col-12,
+  .temp_i8_i2x4_t12 .col-12 {
+    margin-top: -6px; /* компенсация gap в grid*/
+  }
+  .temp_i8_i2x4_t12 .col-12 {
+    margin-top: calc(0.8em - 6px); /* компенсация gap в grid*/
   }
 
   .temp_i10_h2t2,
