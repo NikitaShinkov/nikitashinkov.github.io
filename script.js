@@ -22,6 +22,13 @@ window.addEventListener('scroll', () => {
 });
 
 
+const block = document.querySelector('.profile_info');
+  block.addEventListener('click', () => {
+    window.location.href = '/'; // переход на главную страницу
+});
+
+
+
 function adjustMainMargin() {
   const header = document.querySelector('.profile');
   const main = document.querySelector('main');

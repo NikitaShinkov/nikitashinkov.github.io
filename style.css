@@ -17,6 +17,12 @@ h1, h2, p, a {
   margin: 0px;
 }
 
+a{
+  color: #1750B9;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 0.5px;
+  text-decoration-color:#1750B9;
+}
 
 h1 {
   font-size: 48px;
@@ -51,12 +57,19 @@ h2 {
   background-position: 50% 20%;     /* смещение: X Y (0–100%) */
   background-repeat: no-repeat;     /* не повторять */
   border: 1px solid #D7D7D7;           /* опционально — рамка */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15); /* лёгкая тень */
 }
 
 .btn_back{
   min-width: 62px;
   height: 62px;
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.home-block{
+  display: block;
+  text-decoration: none; /* убирает подчеркивание */
+  color: inherit;        /* цвет текста сохраняется */
 }
 
 .profile_row {
@@ -66,12 +79,12 @@ h2 {
   align-items: flex-start;  /* вертикально выравнивание по верхнему краю */
   gap: 12px;
   background: #fff;
-  border: 1px solid #e6e6e6;
-  border-radius: 8px;
 
   /* ключевой момент */
   height: auto; /* блок подстраивается под контент */
   min-height: 62px; /* под размер аватара */
+
+  cursor: pointer;
 }
 
 /* текстовый блок — занимает всё оставшееся пространство */
@@ -90,12 +103,10 @@ h2 {
   align-items: flex-start;  /* вертикально выравнивание по верхнему краю */
   gap: 20px;
   background: #fff;
-  border: 1px solid #e6e6e6;
-  border-radius: 8px;
 
   /* ключевой момент */
   height: auto; /* блок подстраивается под контент */
-  min-height: 62px; /* под размер аватара */
+  min-height: 62px; /* под размер аватара */  
 }
 
 .profile_contacts {
@@ -127,8 +138,22 @@ h2 {
   align-items: flex-start;  /* вертикально выравнивание по верхнему краю */
   gap: 20px;
   background: #fff;
-  border: 1px solid #e6e6e6;
-  border-radius: 8px;
+}
+
+/* тень под шапкой */
+.profile::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;       /* чуть ниже границы */
+  width: 100%;
+  height: 4px;        /* высота тени */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1), transparent);
+  pointer-events: none;
+}
+
+.hidden{
+  display:none
 }
 
 
