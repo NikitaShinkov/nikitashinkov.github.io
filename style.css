@@ -112,7 +112,7 @@ h2 {
 .profile_contacts {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 16px;
   width: max-content; 
 }
 
@@ -317,7 +317,7 @@ h2 {
   }
 
   .profile_contacts {
-    gap: 20px;
+    gap: 14px;
   }
 
   .container {
@@ -368,8 +368,15 @@ h2 {
     font-size: 12px;
   }
 
+  .profile {
+    flex-direction: column;
+    gap: 0px;
+  }
+
   .profile_contacts {
-    gap: 22px;
+    padding-left: 76px;
+    flex-direction: row;
+    gap: 16px;
   }
 
   .container {
@@ -518,5 +525,20 @@ h2 {
 
   .desktop_text {
     display: none;
+  }
+}
+
+
+
+@media (max-width: 550px) {
+.profile {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .profile_contacts {
+    padding-left: 0px;
+    flex-direction: row;
+    gap: 8px;
   }
 }
