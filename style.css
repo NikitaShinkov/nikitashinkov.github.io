@@ -108,6 +108,14 @@ h2 {
 
 
 .profile {
+  position: fixed;   /* шапка фиксируется на экране при показе */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* чтобы шапка была поверх всего */
+  transform: translateY(0);       /* начальное положение */
+  transition: transform 0.2s ease;
+  
   max-width: 1400px;
   margin: 0 auto;
   height: auto; /* блок подстраивается под контент */
@@ -277,6 +285,10 @@ h2 {
   }
   p, a {
     font-size: 14px;
+  }
+
+  .profile{
+    margin: 0 20px;
   }
 
   .profile_contacts {
