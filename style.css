@@ -1,15 +1,17 @@
 /* Базовые стили для сайта */
-body {
+* {
   font-family: Inter, Arial, sans-serif;
   background-color: #ffffff;
   color: #000000;
-  margin: 0;
-  padding: 20px;
   font-size: 16px;
-  min-width: 320px;
 }
 
-h1, h2, p {
+body {
+  margin: 0;
+  padding: 0 20px 60px;
+}
+
+h1, h2, p, a {
   text-box: trim-both cap alphabetic;
   padding: 0px;
   margin: 0px;
@@ -28,11 +30,96 @@ h2 {
   line-height: 1em;
 }
 
+.profile-row h2 {
+  margin: 0;
+}
+
 .mobile_text {
   display: none;
 }
 
 
+
+/* Header */
+.avatar {
+  min-width: 62px;
+  height: 62px;
+  border-radius: 50%;               /* делает круг */
+  overflow: hidden;                 /* обрезает всё за пределами круга */
+  background-image: url("img/photo.jpg"); /* путь к аватарке */
+  background-size: 140%;            /* масштаб (100% = оригинал, больше = зум) */
+  background-position: 50% 20%;     /* смещение: X Y (0–100%) */
+  background-repeat: no-repeat;     /* не повторять */
+  border: 1px solid #D7D7D7;           /* опционально — рамка */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15); /* лёгкая тень */
+}
+
+.btn_back{
+  min-width: 62px;
+  height: 62px;
+}
+
+.profile-row {
+  width:100%;
+  max-width:750px;
+  display: flex;
+  align-items: flex-start;  /* вертикально выравнивание по верхнему краю */
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+
+  /* ключевой момент */
+  height: auto; /* блок подстраивается под контент */
+  min-height: 62px; /* под размер аватара */
+}
+
+/* текстовый блок — занимает всё оставшееся пространство */
+.text-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;                /* вертикальный отступ между двумя строками */
+  flex: 1 1 auto;           /* растягивается на доступную ширину */
+  min-width: 0; 
+  width: 100%;            /* важно для корректного обтекания текста в flex */
+}
+
+.profile-info {
+  width:100%;
+  display: flex;
+  align-items: flex-start;  /* вертикально выравнивание по верхнему краю */
+  gap: 20px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+
+  /* ключевой момент */
+  height: auto; /* блок подстраивается под контент */
+  min-height: 62px; /* под размер аватара */
+}
+
+.profile-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: max-content; 
+}
+
+
+
+.profile {
+  width:100%;
+  display: flex;
+  align-items: flex-start;  /* вертикально выравнивание по верхнему краю */
+  gap: 20px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+
+  /* ключевой момент */
+  height: auto; /* блок подстраивается под контент */
+  min-height: 62px; /* под размер аватара */
+}
 
 
 
@@ -186,9 +273,14 @@ h2 {
   h2 {
     font-size: 20px;
   }
-  p {
+  p, a {
     font-size: 14px;
   }
+
+  .profile-contacts {
+    gap: 20px;
+  }
+
   .container {
     margin-bottom: 3em;
     gap: 10px;
@@ -222,6 +314,7 @@ h2 {
 
 }
 
+
 @media (max-width: 800px) {
   h1 {
     font-size: 20px;
@@ -232,9 +325,14 @@ h2 {
   .container h2 {
     margin-top: 0.8em;
   }
-  p {
+  p, a {
     font-size: 12px;
   }
+
+  .profile-contacts {
+    gap: 22px;
+  }
+
   .container {
     margin-bottom: 2.5em;
     gap: 6px;
