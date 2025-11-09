@@ -138,7 +138,7 @@ h2 {
 
 .temp_i6t6_i6t6 .col-6 img,
 .temp_s3_i3_i3_t3 .col-3 img,
-.temp_i6_i3_t3 .col-3 img {
+.temp_i6_i3_t3 .col-3 img{
     margin-bottom: 0.8em;
 }
 
@@ -165,15 +165,12 @@ h2 {
   .temp_i8_i4t4 {
     grid-template-rows: 200px 200px auto; /* первые 2 строки — фиксированные, дальше авто */
   }
+  
   .temp_i8_i2x4_h1t12 .col-12{
     margin-top: -10px; /* компенсация gap в grid*/
   }
   .temp_i8_i2x4_t12 .col-12 {
     margin-top: calc(0.8em - 10px); /* компенсация gap в grid*/
-  }
-
-  .temp_i8_i4t4{
-    row-gap: 0.8em;
   }
 
 
@@ -209,7 +206,8 @@ h2 {
   .temp_i6_h2t6,
   .temp_s3_i3_i3_h2t3,
   .temp_s3_i3_i3_t3,
-  .temp_i8_i4h2t4{
+  .temp_i8_i4h2t4,
+  .temp_i8_i4t4{
     row-gap: 0px;
   }
         
@@ -217,8 +215,8 @@ h2 {
     row-gap: 2.5em;
   }
 
-  .temp_i8_i4t4{
-    row-gap: 0.8em;
+  .temp_i8_i4t4 p {
+    margin-top: 1.05em;
   }
 
   .temp_i12h1t12 .col-12 img, 
@@ -241,6 +239,10 @@ h2 {
     height: 320px;
   }
   
+  .temp_i8_i4h2t4,
+  .temp_i8_i4t4 {
+    grid-template-rows: 130px 130px auto; /* первые 2 строки — фиксированные, дальше авто */
+  }
 
   .temp_i10_h2t2 .col-10 { grid-column: span 12; }
   .temp_i10_h2t2 .col-2 { grid-column: span 12; }
@@ -252,6 +254,12 @@ h2 {
   .temp_i6_i3_t3 .col-6, .temp_i6_i3_t3 .col-3 { grid-column: span 12; }
   .temp_s3_i3_i3_h2t3 .mobile-col-12 { grid-column: span 12; }
   .temp_s3_i3_i3_t3 .mobile-col-12 { grid-column: span 12; }
+
+  .temp_i8_i4h2t4 .side_img {grid-row: span 2;}
+  .temp_i8_i4h2t4 .mobile-col-12 { grid-column: span 12; }
+
+  .temp_i8_i4t4 .side_img {grid-row: span 2;}
+  .temp_i8_i4t4 .mobile-col-12 { grid-column: span 12; }
 
   .mobile_text {
     display: block;
