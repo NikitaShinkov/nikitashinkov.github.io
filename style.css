@@ -30,7 +30,7 @@ h2 {
   line-height: 1em;
 }
 
-.profile-row h2 {
+.profile_row h2 {
   margin: 0;
 }
 
@@ -59,7 +59,7 @@ h2 {
   height: 62px;
 }
 
-.profile-row {
+.profile_row {
   width:100%;
   max-width:750px;
   display: flex;
@@ -75,7 +75,7 @@ h2 {
 }
 
 /* текстовый блок — занимает всё оставшееся пространство */
-.text-block {
+.text_block {
   display: flex;
   flex-direction: column;
   gap: 14px;                /* вертикальный отступ между двумя строками */
@@ -84,7 +84,7 @@ h2 {
   width: 100%;            /* важно для корректного обтекания текста в flex */
 }
 
-.profile-info {
+.profile_info {
   width:100%;
   display: flex;
   align-items: flex-start;  /* вертикально выравнивание по верхнему краю */
@@ -98,7 +98,7 @@ h2 {
   min-height: 62px; /* под размер аватара */
 }
 
-.profile-contacts {
+.profile_contacts {
   display: flex;
   flex-direction: column;
   gap: 22px;
@@ -108,17 +108,19 @@ h2 {
 
 
 .profile {
-  width:100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  height: auto; /* блок подстраивается под контент */
+  min-height: 62px; /* под размер аватара */
+  padding: 20px 0;
+
+
   display: flex;
   align-items: flex-start;  /* вертикально выравнивание по верхнему краю */
   gap: 20px;
   background: #fff;
   border: 1px solid #e6e6e6;
   border-radius: 8px;
-
-  /* ключевой момент */
-  height: auto; /* блок подстраивается под контент */
-  min-height: 62px; /* под размер аватара */
 }
 
 
@@ -277,7 +279,7 @@ h2 {
     font-size: 14px;
   }
 
-  .profile-contacts {
+  .profile_contacts {
     gap: 20px;
   }
 
@@ -329,7 +331,7 @@ h2 {
     font-size: 12px;
   }
 
-  .profile-contacts {
+  .profile_contacts {
     gap: 22px;
   }
 
