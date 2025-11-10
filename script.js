@@ -93,3 +93,6 @@ document.querySelector('.link_airport').addEventListener('click', () => {
 document.querySelector('.link_siedle').addEventListener('click', () => {
     window.location.href = 'siedle.html'; 
 });
+document.querySelector('.link_smarthome').addEventListener('click', () => {
+    window.location.href = 'smarthome.html'; 
+});

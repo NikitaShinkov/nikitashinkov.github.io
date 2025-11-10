@@ -177,7 +177,8 @@ h2 {
 
 .link_airport,
 .link_digest,
-.link_siedle {
+.link_siedle,
+.link_smarthome {
   cursor: pointer;
 }
 
