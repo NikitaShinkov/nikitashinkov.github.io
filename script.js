@@ -102,3 +102,6 @@ document.querySelector('.link_wedding').addEventListener('click', () => {
 document.querySelector('.link_restaurant').addEventListener('click', () => {
     window.location.href = 'restaurant.html'; 
 });
+document.querySelector('.link_smartservice').addEventListener('click', () => {
+    window.location.href = 'smartservice.html'; 
+});

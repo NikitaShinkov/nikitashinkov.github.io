@@ -180,7 +180,8 @@ h2 {
 .link_siedle,
 .link_smarthome,
 .link_wedding,
-.link_restaurant {
+.link_restaurant,
+.link_smartservice {
   cursor: pointer;
 }
 
