@@ -662,3 +662,14 @@ h2 {
   }
 
 }
+
+@media (max-width: 420px) {
+  .avatar{
+    display: none;
+  }
+
+  .profile_contacts {
+    padding-left: 0px;
+  }
+
+}
