@@ -54,6 +54,16 @@ const sliders = [
     images: ["img/digest_5_1.png","img/digest_5_2.png","img/digest_5_3.png"],
     displayDuration: 1500
   },
+  {
+    elementId: "slider3",
+    images: ["img/siedle_cover_1.png","img/siedle_cover_2.png","img/siedle_cover_3.png","img/siedle_cover_4.png","img/siedle_cover_5.png","img/siedle_cover_6.png","img/siedle_cover_7.png","img/siedle_cover_8.png","img/siedle_cover_9.png","img/siedle_cover_10.png","img/siedle_cover_11.png","img/siedle_cover_12.png"],
+    displayDuration: 200
+  },
+  {
+    elementId: "slider4",
+    images: ["img/siedle_1_1.png","img/siedle_1_2.png","img/siedle_1_3.png","img/siedle_1_4.png","img/siedle_1_5.png","img/siedle_1_6.png","img/siedle_1_7.png","img/siedle_1_8.png"],
+    displayDuration: 1000
+  },
 ];
 
 // Создаём слайдеры
@@ -79,4 +89,7 @@ document.querySelector('.link_digest').addEventListener('click', () => {
 });
 document.querySelector('.link_airport').addEventListener('click', () => {
     window.location.href = 'airport.html'; 
+});
+document.querySelector('.link_siedle').addEventListener('click', () => {
+    window.location.href = 'siedle.html'; 
 });

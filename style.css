@@ -176,7 +176,8 @@ h2 {
 
 
 .link_airport,
-.link_digest {
+.link_digest,
+.link_siedle {
   cursor: pointer;
 }
 
