@@ -22,9 +22,18 @@ window.addEventListener('scroll', () => {
 });
 
 
-const block = document.querySelector('.profile_info');
-  block.addEventListener('click', () => {
+
+
+document.querySelector('.profile_info').addEventListener('click', () => {
     window.location.href = 'index.html'; // переход на главную страницу
+});
+
+// переходы на страницы проектов
+document.querySelector('.link_digest').addEventListener('click', () => {
+    window.location.href = 'digest.html'; 
+});
+document.querySelector('.link_airport').addEventListener('click', () => {
+    window.location.href = 'airport.html'; 
 });
 
 
@@ -38,6 +47,8 @@ function adjustMainMargin() {
     const headerHeight = header.offsetHeight; // получаем реальную высоту шапки
     main.style.marginTop = headerHeight + 'px'; // добавляем margin-top
   }
+  console.log("добавление margin");
+  
 }
 
 // вызываем при загрузке страницы
@@ -45,30 +56,6 @@ window.addEventListener('load', adjustMainMargin);
 
 // вызываем при изменении размера окна, если шапка адаптивная
 window.addEventListener('resize', adjustMainMargin)
-
-
-
-// Массив с путями к изображениям
-// const images_1 = [
-//   "img/img_example_1_v.png",
-//   "img/img_example_2_v.png",
-//   "img/img_example_3_v.png"
-// ];
-
-// let currentIndex = 0;           // текущий индекс изображения
-// const slider = document.getElementById("slider_1"); 
-
-// // функция для смены изображения
-// function changeImage() {
-//   currentIndex++; 
-//   if (currentIndex >= images_1.length) {
-//     currentIndex = 0;           // возвращаемся к первому изображению
-//   }
-//   slider.src = images_1[currentIndex];
-// }
-
-// // меняем изображение каждые 500 мс
-// setInterval(changeImage, 500);
 
 
 
@@ -84,11 +71,6 @@ const sliders = [
     images: ["img/digest_5_1.png","img/digest_5_2.png","img/digest_5_3.png"],
     displayDuration: 1500
   },
-  {
-    elementId: "slider3",
-    images: ["img/img_example_4.png","img/img_example_3.png","img/img_example_2.png"],
-    displayDuration: 1000
-  }
 ];
 
 // Создаём слайдеры

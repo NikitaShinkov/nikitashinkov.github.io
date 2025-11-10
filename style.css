@@ -166,6 +166,19 @@ h2 {
   display:none
 }
 
+.add_border{
+  border: 1px solid #D7D7D7; 
+}
+
+.remove_margin{
+  margin-bottom: 0 !important;
+}
+
+
+.link_airport,
+.link_digest {
+  cursor: pointer;
+}
 
 
 
@@ -617,6 +630,8 @@ h2 {
   .temp_t5_i7 .col-7 { grid-column: span 12; }
 
   .temp_i3t3x4 .col-3 { grid-column: span 6; }
+
+  .mobile-col-12 { grid-column: span 12; }
 
 
   .mobile_text {
