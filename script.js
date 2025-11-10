@@ -96,3 +96,9 @@ document.querySelector('.link_siedle').addEventListener('click', () => {
 document.querySelector('.link_smarthome').addEventListener('click', () => {
     window.location.href = 'smarthome.html'; 
 });
+document.querySelector('.link_wedding').addEventListener('click', () => {
+    window.location.href = 'wedding.html'; 
+});
+document.querySelector('.link_restaurant').addEventListener('click', () => {
+    window.location.href = 'restaurant.html'; 
+});
