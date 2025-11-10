@@ -24,8 +24,9 @@ window.addEventListener('scroll', () => {
 
 const block = document.querySelector('.profile_info');
   block.addEventListener('click', () => {
-    window.location.href = '/'; // переход на главную страницу
+    window.location.href = 'index.html'; // переход на главную страницу
 });
+
 
 
 

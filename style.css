@@ -44,6 +44,12 @@ h2 {
   display: none;
 }
 
+.block-link {
+  display: block;       /* чтобы <a> занимал весь блок */
+  text-decoration: none; /* убираем подчеркивание */
+  color: inherit;        /* цвет текста внутри наследуется */
+}
+
 
 
 /* Header */
@@ -218,7 +224,9 @@ h2 {
 
 /* ограничение максимальной высоты картинки при блоке на 12 колонок */
 .temp_i12h1t12 .col-12 img,
-.temp_i12h1t12 .media_video {
+.temp_i12h1t12 .media_video,
+.temp_i12t12 .col-12 img,
+.temp_i12t12 .media_video {
   max-height: 700px;
 }
 
@@ -337,12 +345,14 @@ h2 {
 
 
 .temp_s3_i3_i3_t3 .col-3 img,
-.temp_i6_i3_t3 .col-3 img{
+.temp_i6_i3_t3 .col-3 img,
+.temp_i12t12 .col-12 img{
   margin-bottom: 0.8em;
 }
 
 .temp_s3_i3_i3_t3 .col-3 .media_video,
-.temp_i6_i3_t3 .col-3 .media_video{
+.temp_i6_i3_t3 .col-3 .media_video,
+.temp_i12t12 .col-12 .media_video{
   margin-bottom: 0.8em;
 }
 
@@ -483,6 +493,7 @@ h2 {
   
 
   .temp_i12h1t12 .col-12 img, 
+  .temp_i12t12 .col-12 img,
   .temp_i10_h2t2 .col-10 img,
   .temp_i6_h2t6 .col-6 img,
   .temp_i6_i3_h2t3 .col-3 img,
@@ -494,6 +505,7 @@ h2 {
   }
 
   .temp_i12h1t12 .col-12 .media_video, 
+  .temp_i12t12 .col-12 .media_video,
   .temp_i10_h2t2 .col-10 .media_video,
   .temp_i6_h2t6 .col-6 .media_video,
   .temp_i6_i3_h2t3 .col-3 .media_video,
