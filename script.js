@@ -76,18 +76,18 @@ window.addEventListener('resize', adjustMainMargin)
 const sliders = [
   {
     elementId: "slider1",
-    images: ["img/img_example_2_v.png","img/img_example_3_v.png","img/img_example_4_v.png"],
-    displayDuration: 1000
+    images: ["img/digest_4_1.png","img/digest_4_2.png","img/digest_4_3.png"],
+    displayDuration: 1500
   },
   {
     elementId: "slider2",
-    images: ["img/img_example_3_v.png","img/img_example_2_v.png","img/img_example_1_v.png"],
+    images: ["img/digest_5_1.png","img/digest_5_2.png","img/digest_5_3.png"],
     displayDuration: 1500
   },
   {
     elementId: "slider3",
     images: ["img/img_example_4.png","img/img_example_3.png","img/img_example_2.png"],
-    displayDuration: 2000
+    displayDuration: 1000
   }
 ];
 
