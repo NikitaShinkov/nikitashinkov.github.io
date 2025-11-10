@@ -22,23 +22,6 @@ window.addEventListener('scroll', () => {
 });
 
 
-
-
-document.querySelector('.profile_info').addEventListener('click', () => {
-    window.location.href = 'index.html'; // переход на главную страницу
-});
-
-// переходы на страницы проектов
-document.querySelector('.link_digest').addEventListener('click', () => {
-    window.location.href = 'digest.html'; 
-});
-document.querySelector('.link_airport').addEventListener('click', () => {
-    window.location.href = 'airport.html'; 
-});
-
-
-
-
 function adjustMainMargin() {
   const header = document.querySelector('.profile');
   const main = document.querySelector('main');
@@ -83,4 +66,17 @@ sliders.forEach(slider => {
     currentIndex = (currentIndex + 1) % slider.images.length;
     imgElement.src = slider.images[currentIndex];
   }, slider.displayDuration);
+});
+
+
+document.querySelector('.profile_info').addEventListener('click', () => {
+    window.location.href = 'index.html'; // переход на главную страницу
+});
+
+// переходы на страницы проектов
+document.querySelector('.link_digest').addEventListener('click', () => {
+    window.location.href = 'digest.html'; 
+});
+document.querySelector('.link_airport').addEventListener('click', () => {
+    window.location.href = 'airport.html'; 
 });
