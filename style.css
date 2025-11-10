@@ -360,6 +360,10 @@ h2 {
   margin-bottom: 0.8em;
 }
 
+.full_height{
+    max-height: 100% !important;
+}
+
 @media (max-width: 1400px) {
   h1 {
     font-size: 32px;
@@ -408,8 +412,6 @@ h2 {
   .temp_i8_i2x4_t12 .col-12 {
     margin-top: calc(0.8em - 10px); /* компенсация gap в grid*/
   }
-
-
 }
 
 
@@ -624,6 +626,10 @@ h2 {
   .desktop_text {
     display: none;
   }
+
+  .full_height{
+    height: auto !important;
+  }
 }
 
 
@@ -665,11 +671,11 @@ h2 {
 
 @media (max-width: 420px) {
   .avatar{
-    display: none;
+    /* display: none; */
   }
 
   .profile_contacts {
-    padding-left: 0px;
+    /* padding-left: 0px; */
   }
 
 }
