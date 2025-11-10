@@ -52,7 +52,7 @@ h2 {
   height: 62px;
   border-radius: 50%;               /* делает круг */
   overflow: hidden;                 /* обрезает всё за пределами круга */
-  background-image: url("img/photo.jpg"); /* путь к аватарке */
+  background-image: url("img/photo.png"); /* путь к аватарке */
   background-size: 140%;            /* масштаб (100% = оригинал, больше = зум) */
   background-position: 50% 20%;     /* смещение: X Y (0–100%) */
   background-repeat: no-repeat;     /* не повторять */
@@ -159,6 +159,8 @@ h2 {
 
 
 
+
+
 .container {
   display: grid;
   grid-template-columns: repeat(12, 1fr); /* 12 равных колонок */
@@ -183,6 +185,15 @@ h2 {
 }
 
 [class^="col-"] img {
+  width: 100%;        /* растягивается на всю ширину блока */
+  height: auto;       /* сохраняет пропорции */
+  display: block;
+  object-fit: cover;   /* заполняет блок без искажений */
+  object-position: center; /* центрирует картинку */
+
+}
+
+[class^="col-"] .media_video {
   width: 100%;        /* растягивается на всю ширину блока */
   height: auto;       /* сохраняет пропорции */
   display: block;
