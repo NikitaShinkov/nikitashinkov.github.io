@@ -44,6 +44,10 @@ h2 {
   display: none;
 }
 
+.text_block .project_page{
+    display: none;
+  }
+
 .block-link {
   display: block;       /* чтобы <a> занимал весь блок */
   text-decoration: none; /* убираем подчеркивание */
@@ -434,6 +438,10 @@ h2 {
     gap: 16px;
   }
 
+  .profile_contacts.project_page{
+    padding-left: 158px;
+  }
+
   .container {
     margin-bottom: 2.5em;
     gap: 6px;
@@ -620,15 +628,37 @@ h2 {
 
 
 
-@media (max-width: 550px) {
-.profile {
+@media (max-width: 600px) {
+  .profile {
     flex-direction: column;
-    gap: 18px;
+    gap: 12px;
   }
 
   .profile_contacts {
-    padding-left: 0px;
     flex-direction: row;
     gap: 8px;
   }
+
+  .text_block .project_page{
+    display: flex;
+    gap: 13px;
+  }
+
+  .profile_contacts.project_page{
+    padding-left: 0px;
+  }
+
+  .profile > .profile_contacts.project_page,
+  .project_page_text{
+    display: none;
+  }
+
+
+}
+
+@media (max-width: 500px) {
+  .text_block .project_page{
+    flex-direction: column;
+  }
+
 }
