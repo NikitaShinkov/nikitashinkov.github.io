@@ -30,8 +30,6 @@ function adjustMainMargin() {
     const headerHeight = header.offsetHeight; // получаем реальную высоту шапки
     main.style.marginTop = headerHeight + 'px'; // добавляем margin-top
   }
-  console.log("добавление margin");
-  
 }
 
 // вызываем при загрузке страницы
