@@ -67,6 +67,7 @@ const sliders = [
 // Создаём слайдеры
 sliders.forEach(slider => {
   const imgElement = document.getElementById(slider.elementId);
+  if (!imgElement) return;
   let currentIndex = 0;
 
   setInterval(() => {
