@@ -33,7 +33,7 @@ function adjustMainMargin() {
 }
 
 // вызываем при загрузке страницы
-window.addEventListener('load', adjustMainMargin);
+document.addEventListener('DOMContentLoaded', adjustMainMargin);
 
 // вызываем при изменении размера окна, если шапка адаптивная
 window.addEventListener('resize', adjustMainMargin)
