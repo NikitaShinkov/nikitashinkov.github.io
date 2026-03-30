@@ -83,24 +83,21 @@ document.querySelector('.profile_info').addEventListener('click', () => {
 });
 
 // переходы на страницы проектов
-document.querySelector('.link_digest').addEventListener('click', () => {
-    window.location.href = 'digest.html'; 
-});
-document.querySelector('.link_airport').addEventListener('click', () => {
-    window.location.href = 'airport.html'; 
-});
-document.querySelector('.link_siedle').addEventListener('click', () => {
-    window.location.href = 'siedle.html'; 
-});
-document.querySelector('.link_smarthome').addEventListener('click', () => {
-    window.location.href = 'smarthome.html'; 
-});
-document.querySelector('.link_wedding').addEventListener('click', () => {
-    window.location.href = 'wedding.html'; 
-});
-document.querySelector('.link_restaurant').addEventListener('click', () => {
-    window.location.href = 'restaurant.html'; 
-});
-document.querySelector('.link_smartservice').addEventListener('click', () => {
-    window.location.href = 'smartservice.html'; 
+const links = [
+  { selector: '.link_digest', url: 'digest.html' },
+  { selector: '.link_airport', url: 'airport.html' },
+  { selector: '.link_siedle', url: 'siedle.html' },
+  { selector: '.link_smarthome', url: 'smarthome.html' },
+  { selector: '.link_wedding', url: 'wedding.html' },
+  { selector: '.link_restaurant', url: 'restaurant.html' },
+  { selector: '.link_smartservice', url: 'smartservice.html' },
+];
+
+links.forEach(link => {
+  const element = document.querySelector(link.selector);
+  if (!element) return;
+
+  element.addEventListener('click', () => {
+    window.location.href = link.url;
+  });
 });
