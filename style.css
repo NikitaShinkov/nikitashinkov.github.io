@@ -58,15 +58,16 @@ h2 {
 
 /* Header */
 .avatar {
-  min-width: 62px;
-  height: 62px;
+  min-width: 50px;
+  height: 50px;
   border-radius: 50%;               /* делает круг */
   overflow: hidden;                 /* обрезает всё за пределами круга */
   background-image: url("img/photo.png"); /* путь к аватарке */
-  background-size: 140%;            /* масштаб (100% = оригинал, больше = зум) */
+  background-size: 70px 70px;;      /* масштаб (100% = оригинал, больше = зум) */
   background-position: 50% 20%;     /* смещение: X Y (0–100%) */
   background-repeat: no-repeat;     /* не повторять */
   border: 1px solid #D7D7D7;           /* опционально — рамка */
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .btn_back{
@@ -86,7 +87,7 @@ h2 {
   width:100%;
   max-width:750px;
   display: flex;
-  align-items: flex-start;  /* вертикально выравнивание по верхнему краю */
+  align-items: center; /* вертикально выравнивание по центру */
   gap: 12px;
   background: #fff;
 
@@ -121,7 +122,7 @@ h2 {
 
 .profile_contacts {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 16px;
   width: max-content; 
 }
@@ -145,7 +146,7 @@ h2 {
 
 
   display: flex;
-  align-items: flex-start;  /* вертикально выравнивание по верхнему краю */
+  align-items: center; /* вертикально выравнивание по центру */
   gap: 20px;
   background: #fff;
 }
@@ -382,7 +383,7 @@ h2 {
     max-height: 100% !important;
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1460px) {
   h1 {
     font-size: 32px;
   }
