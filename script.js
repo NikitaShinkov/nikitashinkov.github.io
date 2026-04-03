@@ -78,17 +78,6 @@ sliders.forEach(slider => {
 });
 
 
-// document.querySelector('.profile_info').addEventListener('click', () => {
-//     window.location.href = 'index.html'; // переход на главную страницу
-// });
-
-document.querySelectorAll('.profile_contacts a').forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.stopPropagation();
-  });
-});
-
-
 // переходы на страницы проектов
 const links = [
   { selector: '.link_digest', url: 'digest.html' },
