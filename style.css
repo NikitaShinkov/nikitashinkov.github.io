@@ -24,6 +24,16 @@ a{
   text-decoration-color:#1750B9;
 }
 
+/* ссылка в шапке сайта */
+h2 a {
+  display: inline-block; 
+  text-decoration: none;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
 h1 {
   font-size: 48px;
   margin: 0 0 0.6em;
@@ -93,9 +103,7 @@ h2 {
 
   /* ключевой момент */
   height: auto; /* блок подстраивается под контент */
-  min-height: 62px; /* под размер аватара */
-
-  cursor: pointer;
+  min-height: 45px; /* под размер аватара */
 }
 
 /* текстовый блок — занимает всё оставшееся пространство */
@@ -117,7 +125,7 @@ h2 {
 
   /* ключевой момент */
   height: auto; /* блок подстраивается под контент */
-  min-height: 62px; /* под размер аватара */  
+  min-height: 45px; /* под размер аватара */  
 }
 
 .profile_contacts {
@@ -141,7 +149,8 @@ h2 {
   max-width: 1400px;
   margin: 0 auto;
   height: auto; /* блок подстраивается под контент */
-  min-height: 62px; /* под размер аватара */
+  min-height: 45px; /* под размер аватара */
+  padding: 6px 0;
 
 
   display: flex;
