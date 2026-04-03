@@ -58,12 +58,12 @@ h2 {
 
 /* Header */
 .avatar {
-  min-width: 50px;
-  height: 50px;
+  min-width: 45px;
+  height: 45px;
   border-radius: 50%;               /* делает круг */
   overflow: hidden;                 /* обрезает всё за пределами круга */
   background-image: url("img/photo.png"); /* путь к аватарке */
-  background-size: 70px 70px;;      /* масштаб (100% = оригинал, больше = зум) */
+  background-size: 60px 60px;;      /* масштаб (100% = оригинал, больше = зум) */
   background-position: 50% 20%;     /* смещение: X Y (0–100%) */
   background-repeat: no-repeat;     /* не повторять */
   border: 1px solid #D7D7D7;           /* опционально — рамка */
@@ -88,7 +88,7 @@ h2 {
   max-width:750px;
   display: flex;
   align-items: center; /* вертикально выравнивание по центру */
-  gap: 12px;
+  gap: 8px;
   background: #fff;
 
   /* ключевой момент */
@@ -102,7 +102,7 @@ h2 {
 .text_block {
   display: flex;
   flex-direction: column;
-  gap: 14px;                /* вертикальный отступ между двумя строками */
+  gap: 10px;                /* вертикальный отступ между двумя строками */
   flex: 1 1 auto;           /* растягивается на доступную ширину */
   min-width: 0; 
   width: 100%;            /* важно для корректного обтекания текста в flex */
@@ -142,7 +142,6 @@ h2 {
   margin: 0 auto;
   height: auto; /* блок подстраивается под контент */
   min-height: 62px; /* под размер аватара */
-  padding: 20px 0;
 
 
   display: flex;
@@ -448,19 +447,9 @@ h2 {
     font-size: 12px;
   }
 
-  .profile {
-    flex-direction: column;
-    gap: 0px;
-  }
-
   .profile_contacts {
-    padding-left: 76px;
     flex-direction: row;
     gap: 16px;
-  }
-
-  .profile_contacts.project_page{
-    padding-left: 158px;
   }
 
   .container {
@@ -680,13 +669,6 @@ h2 {
     display: none;
   }
 
-
-}
-
-@media (max-width: 500px) {
-  .text_block .project_page{
-    flex-direction: column;
-  }
 
 }
 
