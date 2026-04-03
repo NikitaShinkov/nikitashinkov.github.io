@@ -54,9 +54,6 @@ h2 {
   display: none;
 }
 
-.text_block .project_page{
-    display: none;
-  }
 
 .block-link {
   display: block;       /* чтобы <a> занимал весь блок */
@@ -95,7 +92,6 @@ h2 {
 
 .profile_row {
   width:100%;
-  max-width:750px;
   display: flex;
   align-items: center; /* вертикально выравнивание по центру */
   gap: 8px;
@@ -109,7 +105,8 @@ h2 {
 /* текстовый блок — занимает всё оставшееся пространство */
 .text_block {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   gap: 10px;                /* вертикальный отступ между двумя строками */
   flex: 1 1 auto;           /* растягивается на доступную ширину */
   min-width: 0; 
@@ -662,6 +659,12 @@ h2 {
   .profile_contacts {
     flex-direction: row;
     gap: 8px;
+  }
+
+  .text_block {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
   }
 
   .text_block .project_page{
