@@ -1,5 +1,5 @@
 let lastScroll = 0;
-const header = document.querySelector('.profile');
+const header = document.querySelector('.profile, .profile_main');
 
 window.addEventListener('scroll', () => {
   const currentScroll = window.pageYOffset;
@@ -23,7 +23,7 @@ window.addEventListener('scroll', () => {
 
 
 function adjustMainMargin() {
-  const header = document.querySelector('.profile');
+  const header = document.querySelector('.profile, .profile_main');
   const main = document.querySelector('main');
 
   if (header && main) {

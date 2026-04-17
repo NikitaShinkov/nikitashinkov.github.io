@@ -46,7 +46,8 @@ h2 {
   line-height: 1em;
 }
 
-.profile_row h2 {
+.profile_row h2,
+.profile_row_main h2 {
   margin: 0;
 }
 
@@ -90,17 +91,22 @@ h2 {
   color: inherit;        /* цвет текста сохраняется */
 }
 
-.profile_row {
+.profile_row, .profile_row_main {
   width:100%;
   display: flex;
   align-items: center; /* вертикально выравнивание по центру */
   gap: 8px;
   background: #fff;
-
-  /* ключевой момент */
+  
   height: auto; /* блок подстраивается под контент */
   min-height: 45px; /* под размер аватара */
 }
+
+.profile_row_main {
+  align-items: flex-start;
+}
+
+
 
 /* текстовый блок — занимает всё оставшееся пространство */
 .text_block {
@@ -112,6 +118,21 @@ h2 {
   min-width: 0; 
   width: 100%;            /* важно для корректного обтекания текста в flex */
 }
+
+/* текстовый блок для главной*/
+.text_block_main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  gap: 10px;                /* вертикальный отступ между двумя строками */
+  flex: 1 1 auto;           /* растягивается на доступную ширину */
+  min-width: 0; 
+  width: 100%;            /* важно для корректного обтекания текста в flex */
+}
+
+
 
 .profile_info {
   width:100%;
@@ -134,7 +155,7 @@ h2 {
 
 
 
-.profile {
+.profile, .profile_main {
   position: fixed;   /* шапка фиксируется на экране при показе */
   top: 0;
   left: 0;
@@ -399,7 +420,7 @@ h2 {
     font-size: 14px;
   }
 
-  .profile{
+  .profile, .profile_main{
     margin: 0 20px;
   }
 
@@ -651,7 +672,7 @@ h2 {
 
 
 @media (max-width: 600px) {
-  .profile {
+  .profile, .profile_main {
     flex-direction: column;
     gap: 12px;
   }
@@ -662,6 +683,13 @@ h2 {
   }
 
   .text_block {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  /* текстовый блок для главной*/
+  .text_block_main {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
