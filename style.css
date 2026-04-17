@@ -120,7 +120,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;                /* вертикальный отступ между двумя строками */
+  gap: 6px;                /* вертикальный отступ между двумя строками */
   flex: 1 1 auto;           /* растягивается на доступную ширину */
   min-width: 0; 
   width: 100%;            /* важно для корректного обтекания текста в flex */
@@ -131,6 +131,7 @@ h2 {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  gap: 10px;
 }
 
 
@@ -481,14 +482,10 @@ h2 {
     font-size: 12px;
   }
 
-  .profile_main{
-    padding-bottom: 20px;
-  }
-
   .profile_text_contacts{
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 10px;
   }
 
   .profile_contacts {
