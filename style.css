@@ -11,13 +11,13 @@ body {
   padding: 0 20px 60px;
 }
 
-h1, h2, p, a {
+h1, h2, p {
   text-box: trim-both cap alphabetic;
   padding: 0px;
   margin: 0px;
 }
 
-a{
+a {
   color: #1750B9;
   text-underline-offset: 3px;
   text-decoration-thickness: 0.5px;
