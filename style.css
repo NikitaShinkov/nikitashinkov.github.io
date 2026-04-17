@@ -106,10 +106,17 @@ h2 {
   align-items: flex-start;
 }
 
+.profile_text_contacts{
+  width:100%;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
 
 
 /* текстовый блок — занимает всё оставшееся пространство */
-.text_block {
+.text_block, .text_block_main {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -121,15 +128,9 @@ h2 {
 
 /* текстовый блок для главной*/
 .text_block_main {
-  display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-
-  gap: 10px;                /* вертикальный отступ между двумя строками */
-  flex: 1 1 auto;           /* растягивается на доступную ширину */
-  min-width: 0; 
-  width: 100%;            /* важно для корректного обтекания текста в flex */
 }
 
 
@@ -177,8 +178,14 @@ h2 {
   background: #fff;
 }
 
+.profile_main {
+  padding: 16px 0;
+}
+
+
+
 /* тень под шапкой */
-.profile::after {
+.profile::after, .profile_main::after {
   content: '';
   position: absolute;
   left: 0;
@@ -474,6 +481,16 @@ h2 {
     font-size: 12px;
   }
 
+  .profile_main{
+    padding-bottom: 20px;
+  }
+
+  .profile_text_contacts{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
   .profile_contacts {
     flex-direction: row;
     gap: 16px;
@@ -682,14 +699,7 @@ h2 {
     gap: 8px;
   }
 
-  .text_block {
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
-
-  /* текстовый блок для главной*/
-  .text_block_main {
+  .text_block, .text_block_main {
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
