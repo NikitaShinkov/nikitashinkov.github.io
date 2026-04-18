@@ -2,12 +2,16 @@ let lastScroll = window.pageYOffset;
 const header = document.querySelector('header');
 
 const SHOW_AFTER_HEIGHTS = 4;
+const SHOW_TRIGGER = 20; // NEW: порог для запуска анимации
 
 const ANIMATION_SPEED = 0.25;
 const EASING = 'ease-out';
 
 let headerHeight = header.offsetHeight;
 let hiddenOffset = 0;
+
+let upScrollAccumulated = 0;
+let isShowing = false;
 
 header.style.transform = 'translateY(0)';
 header.style.transition = 'none';
@@ -23,6 +27,8 @@ window.addEventListener('scroll', () => {
   // ======================
   if (currentScroll <= 0) {
     hiddenOffset = 0;
+    upScrollAccumulated = 0;
+    isShowing = false;
 
     header.style.transition = 'none';
     header.style.transform = 'translateY(0)';
@@ -35,6 +41,9 @@ window.addEventListener('scroll', () => {
   // вниз → без анимации
   // ======================
   if (delta > 0) {
+    upScrollAccumulated = 0;
+    isShowing = false;
+
     hiddenOffset += delta;
 
     if (hiddenOffset > headerHeight) {
@@ -46,7 +55,7 @@ window.addEventListener('scroll', () => {
   }
 
   // ======================
-  // вверх → с анимацией
+  // вверх → сначала копим 20px
   // ======================
   else if (delta < 0) {
     if (currentScroll <= showLimit) {
@@ -54,16 +63,23 @@ window.addEventListener('scroll', () => {
       return;
     }
 
-    hiddenOffset += delta;
-    if (hiddenOffset < 0) hiddenOffset = 0;
+    upScrollAccumulated += Math.abs(delta);
 
-    header.style.transition = `transform ${ANIMATION_SPEED}s ${EASING}`;
-    header.style.transform = `translateY(-${hiddenOffset}px)`;
+    // ======================
+    // запуск анимации ОДИН РАЗ
+    // ======================
+    if (!isShowing && upScrollAccumulated >= SHOW_TRIGGER) {
+      isShowing = true;
+
+      hiddenOffset = 0;
+
+      header.style.transition = `transform ${ANIMATION_SPEED}s ${EASING}`;
+      header.style.transform = 'translateY(0)';
+    }
   }
 
   lastScroll = currentScroll;
 });
-
 
 function adjustMainMargin() {
   const header = document.querySelector('header');
