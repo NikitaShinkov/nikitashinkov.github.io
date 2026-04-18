@@ -17,6 +17,14 @@ floatingHeader.style.transition = 'none';
 floatingHeader.style.transform = 'translateY(-100%)';
 floatingHeader.style.pointerEvents = 'auto'; // теперь кликабельно
 
+/* отладка */
+floatingHeader.style.background = 'rgba(255, 0, 0, 0.5)'; // красный 50%
+floatingHeader.style.opacity = '1';
+floatingHeader.querySelectorAll('*').forEach(el => {
+  el.style.backgroundColor = 'transparent';
+});
+/* конец отладки */
+
 document.body.appendChild(floatingHeader);
 
 // ======================
@@ -110,11 +118,28 @@ window.addEventListener('scroll', () => {
   // СКРОЛЛ ВВЕРХ
   // ======================
   else if (delta < 0) {
+
+    // Пока не дошли до зоны появления —
+    // дубликат двигается вместе с исходной шапкой
     if (currentScroll <= showLimit) {
+      upScrollAccumulated = 0;
+      isVisible = false;
+
+      hiddenOffset += delta; // delta отрицательный
+
+      if (hiddenOffset < 0) {
+        hiddenOffset = 0;
+      }
+
+      floatingHeader.style.transition = 'none';
+      floatingHeader.style.transform =
+        `translateY(-${hiddenOffset}px)`;
+
       lastScroll = currentScroll;
       return;
     }
 
+    // Ниже зоны появления — начинаем считать движение вверх
     upScrollAccumulated += Math.abs(delta);
 
     if (!isVisible && upScrollAccumulated >= SHOW_TRIGGER) {
