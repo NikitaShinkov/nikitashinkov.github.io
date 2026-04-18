@@ -1,24 +1,32 @@
 let lastScroll = window.pageYOffset;
 const header = document.querySelector('.profile, .profile_main');
 
+const SHOW_TRIGGER = 20; // сколько px вверх нужно проскроллить для показа
+
 let headerHeight = header.offsetHeight;
-let hiddenOffset = 0; // насколько шапка скрыта в px
+let hiddenOffset = 0;
+let upScrollAccumulated = 0; // накопленный скролл вверх
 
 window.addEventListener('scroll', () => {
   const currentScroll = window.pageYOffset;
   const delta = currentScroll - lastScroll;
 
-  // если в самом верху страницы — показываем полностью
+  // в самом верху страницы
   if (currentScroll <= 0) {
     hiddenOffset = 0;
-    header.style.transition = 'transform 0.3s ease';
+    upScrollAccumulated = 0;
+    header.style.transition = 'transform 0.2s ease';
     header.style.transform = 'translateY(0)';
     lastScroll = currentScroll;
     return;
   }
 
+  // ======================
+  // Скролл вниз
+  // ======================
   if (delta > 0) {
-    // скролл вниз → скрываем плавно по пикселям
+    upScrollAccumulated = 0;
+
     hiddenOffset += delta;
 
     if (hiddenOffset > headerHeight) {
@@ -27,17 +35,39 @@ window.addEventListener('scroll', () => {
 
     header.style.transition = 'none';
     header.style.transform = `translateY(-${hiddenOffset}px)`;
+  }
 
-  } else if (delta < 0) {
-    // скролл вверх → показываем полностью с анимацией
-    hiddenOffset = 0;
-    header.style.transition = 'transform 0.35s ease';
-    header.style.transform = 'translateY(0)';
+  // ======================
+  // Скролл вверх
+  // ======================
+  else if (delta < 0) {
+
+    // если шапка скрыта частично — возвращаем по пикселям
+    if (hiddenOffset > 0 && hiddenOffset < headerHeight) {
+      hiddenOffset += delta; // delta отрицательный
+
+      if (hiddenOffset < 0) hiddenOffset = 0;
+
+      header.style.transition = 'none';
+      header.style.transform = `translateY(-${hiddenOffset}px)`;
+    }
+
+    // если скрыта полностью — ждём порог
+    else if (hiddenOffset >= headerHeight) {
+      upScrollAccumulated += Math.abs(delta);
+
+      if (upScrollAccumulated >= SHOW_TRIGGER) {
+        hiddenOffset = 0;
+        upScrollAccumulated = 0;
+
+        header.style.transition = 'transform 0.35s ease';
+        header.style.transform = 'translateY(0)';
+      }
+    }
   }
 
   lastScroll = currentScroll;
 });
-
 
 function adjustMainMargin() {
   const header = document.querySelector('.profile, .profile_main');
