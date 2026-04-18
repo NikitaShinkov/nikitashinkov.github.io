@@ -1,18 +1,21 @@
 let lastScroll = window.pageYOffset;
 
 const staticHeader = document.querySelector('header');
+const body = document.body;
 
+// ======================
+// СОЗДАЁМ ДУБЛИКАТ
+// ======================
 const floatingHeader = staticHeader.cloneNode(true);
 
-floatingHeader.style.position = 'fixed';
-floatingHeader.style.top = '0';
-floatingHeader.style.left = '0';
-floatingHeader.style.right = '0';
-floatingHeader.style.zIndex = '9999';
+// важно: убираем повторяющиеся id внутри клона
+floatingHeader.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
 
-floatingHeader.style.transform = 'translateY(0)';
+floatingHeader.style.position = 'fixed';
+floatingHeader.style.zIndex = '9999';
 floatingHeader.style.transition = 'none';
-floatingHeader.style.pointerEvents = 'none';
+floatingHeader.style.transform = 'translateY(-100%)';
+floatingHeader.style.pointerEvents = 'auto'; // теперь кликабельно
 
 document.body.appendChild(floatingHeader);
 
@@ -23,12 +26,46 @@ const SHOW_TRIGGER = 20;
 const ANIMATION_SPEED = 0.25;
 const EASING = 'ease-out';
 
+// запас чтобы тень не торчала
+const EXTRA_HIDE_OFFSET = 4;
+
 // ======================
 let headerHeight = staticHeader.getBoundingClientRect().height;
 
 let hiddenOffset = 0;
 let upScrollAccumulated = 0;
 let isVisible = false;
+
+// ======================
+// КОПИРУЕМ ОТСТУПЫ BODY
+// ======================
+function syncFloatingHeaderOffsets() {
+  const bodyStyle = getComputedStyle(body);
+
+  const padTop = parseFloat(bodyStyle.paddingTop) || 0;
+  const padLeft = parseFloat(bodyStyle.paddingLeft) || 0;
+  const padRight = parseFloat(bodyStyle.paddingRight) || 0;
+
+  const marTop = parseFloat(bodyStyle.marginTop) || 0;
+  const marLeft = parseFloat(bodyStyle.marginLeft) || 0;
+  const marRight = parseFloat(bodyStyle.marginRight) || 0;
+
+  floatingHeader.style.top = `${padTop + marTop}px`;
+  floatingHeader.style.left = `${padLeft + marLeft}px`;
+  floatingHeader.style.right = `${padRight + marRight}px`;
+}
+
+// ======================
+function updateHeaderHeight() {
+  headerHeight = staticHeader.getBoundingClientRect().height;
+}
+
+// ======================
+function hideHeaderInstant() {
+  floatingHeader.style.transition = 'none';
+  floatingHeader.style.transform =
+    `translateY(-${headerHeight + EXTRA_HIDE_OFFSET}px)`;
+}
 
 // ======================
 window.addEventListener('scroll', () => {
@@ -38,22 +75,21 @@ window.addEventListener('scroll', () => {
   const showLimit = SHOW_AFTER_HEIGHTS * headerHeight;
 
   // ======================
-  // ВВЕРХ СТРАНИЦЫ
+  // ВВЕРХУ СТРАНИЦЫ
   // ======================
   if (currentScroll <= 0) {
     hiddenOffset = 0;
     upScrollAccumulated = 0;
     isVisible = false;
 
-    floatingHeader.style.transition = 'none';
-    floatingHeader.style.transform = 'translateY(-100%)';
+    hideHeaderInstant();
 
     lastScroll = currentScroll;
     return;
   }
 
   // ======================
-  // СКРОЛЛ ВНИЗ → ДВИЖЕМ HEADER ВМЕСТЕ СО СКРОЛЛОМ
+  // СКРОЛЛ ВНИЗ
   // ======================
   if (delta > 0) {
     upScrollAccumulated = 0;
@@ -61,16 +97,17 @@ window.addEventListener('scroll', () => {
 
     hiddenOffset += delta;
 
-    if (hiddenOffset > headerHeight) {
-      hiddenOffset = headerHeight;
+    if (hiddenOffset > headerHeight + EXTRA_HIDE_OFFSET) {
+      hiddenOffset = headerHeight + EXTRA_HIDE_OFFSET;
     }
 
     floatingHeader.style.transition = 'none';
-    floatingHeader.style.transform = `translateY(-${hiddenOffset}px)`;
+    floatingHeader.style.transform =
+      `translateY(-${hiddenOffset}px)`;
   }
 
   // ======================
-  // СКРОЛЛ ВВЕРХ → показываем с анимацией
+  // СКРОЛЛ ВВЕРХ
   // ======================
   else if (delta < 0) {
     if (currentScroll <= showLimit) {
@@ -82,10 +119,11 @@ window.addEventListener('scroll', () => {
 
     if (!isVisible && upScrollAccumulated >= SHOW_TRIGGER) {
       isVisible = true;
-
       hiddenOffset = 0;
 
-      floatingHeader.style.transition = `transform ${ANIMATION_SPEED}s ${EASING}`;
+      floatingHeader.style.transition =
+        `transform ${ANIMATION_SPEED}s ${EASING}`;
+
       floatingHeader.style.transform = 'translateY(0)';
     }
   }
@@ -94,14 +132,23 @@ window.addEventListener('scroll', () => {
 });
 
 // ======================
-function updateHeaderHeight() {
-  headerHeight = staticHeader.getBoundingClientRect().height;
-}
+// ИНИЦИАЛИЗАЦИЯ
+// ======================
+document.addEventListener('DOMContentLoaded', () => {
+  updateHeaderHeight();
+  syncFloatingHeaderOffsets();
+  hideHeaderInstant();
+});
 
-document.addEventListener('DOMContentLoaded', updateHeaderHeight);
-window.addEventListener('load', updateHeaderHeight);
-window.addEventListener('resize', updateHeaderHeight);
+window.addEventListener('load', () => {
+  updateHeaderHeight();
+  syncFloatingHeaderOffsets();
+});
 
+window.addEventListener('resize', () => {
+  updateHeaderHeight();
+  syncFloatingHeaderOffsets();
+});
 
 // Настройки слайдеров. Добавить для нужной картинки id="slider1" (slider2, slider3 и т.д.)
 const sliders = [
