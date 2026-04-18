@@ -18,11 +18,11 @@ floatingHeader.style.transform = 'translateY(-100%)';
 floatingHeader.style.pointerEvents = 'auto'; // теперь кликабельно
 
 /* отладка */
-floatingHeader.style.background = 'rgba(255, 0, 0, 0.5)'; // красный 50%
-floatingHeader.style.opacity = '1';
-floatingHeader.querySelectorAll('*').forEach(el => {
-  el.style.backgroundColor = 'transparent';
-});
+// floatingHeader.style.background = 'rgba(255, 0, 0, 0.5)'; // красный 50%
+// floatingHeader.style.opacity = '1';
+// floatingHeader.querySelectorAll('*').forEach(el => {
+//   el.style.backgroundColor = 'transparent';
+// });
 /* конец отладки */
 
 document.body.appendChild(floatingHeader);
