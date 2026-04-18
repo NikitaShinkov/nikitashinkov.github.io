@@ -426,11 +426,7 @@ h2 {
   p, a {
     font-size: 14px;
   }
-
-  .profile, .profile_main{
-    margin: 0 20px;
-  }
-
+  
   .profile_contacts {
     gap: 14px;
   }
