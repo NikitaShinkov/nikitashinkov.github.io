@@ -56,7 +56,7 @@ window.addEventListener('scroll', () => {
     // частично скрыт
     if (hiddenOffset > 0 && hiddenOffset < headerHeight) {
       hiddenOffset += delta;
-
+      
       if (hiddenOffset < 0) hiddenOffset = 0;
 
       header.style.transition = 'none';
