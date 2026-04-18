@@ -1,17 +1,20 @@
 let lastScroll = window.pageYOffset;
 const header = document.querySelector('.profile, .profile_main');
 
-const SHOW_TRIGGER = 20; // сколько px вверх нужно проскроллить для показа
+const SHOW_TRIGGER = 20;
+const SHOW_AFTER_HEIGHTS = 4;
 
 let headerHeight = header.offsetHeight;
 let hiddenOffset = 0;
-let upScrollAccumulated = 0; // накопленный скролл вверх
+let upScrollAccumulated = 0;
 
 window.addEventListener('scroll', () => {
   const currentScroll = window.pageYOffset;
   const delta = currentScroll - lastScroll;
 
-  // в самом верху страницы
+  const showLimit = SHOW_AFTER_HEIGHTS * headerHeight;
+
+  // верх страницы
   if (currentScroll <= 0) {
     hiddenOffset = 0;
     upScrollAccumulated = 0;
@@ -22,7 +25,7 @@ window.addEventListener('scroll', () => {
   }
 
   // ======================
-  // Скролл вниз
+  // вниз
   // ======================
   if (delta > 0) {
     upScrollAccumulated = 0;
@@ -38,13 +41,21 @@ window.addEventListener('scroll', () => {
   }
 
   // ======================
-  // Скролл вверх
+  // вверх
   // ======================
   else if (delta < 0) {
 
-    // если шапка скрыта частично — возвращаем по пикселям
+    const canShowHeader = currentScroll > showLimit;
+
+    console.log(
+      'scrollY:', currentScroll,
+      '| limit:', showLimit,
+      '| show header:', canShowHeader
+    );
+
+    // частично скрыт
     if (hiddenOffset > 0 && hiddenOffset < headerHeight) {
-      hiddenOffset += delta; // delta отрицательный
+      hiddenOffset += delta;
 
       if (hiddenOffset < 0) hiddenOffset = 0;
 
@@ -52,11 +63,11 @@ window.addEventListener('scroll', () => {
       header.style.transform = `translateY(-${hiddenOffset}px)`;
     }
 
-    // если скрыта полностью — ждём порог
+    // полностью скрыт
     else if (hiddenOffset >= headerHeight) {
       upScrollAccumulated += Math.abs(delta);
 
-      if (upScrollAccumulated >= SHOW_TRIGGER) {
+      if (upScrollAccumulated >= SHOW_TRIGGER && canShowHeader) {
         hiddenOffset = 0;
         upScrollAccumulated = 0;
 
@@ -79,16 +90,9 @@ function adjustMainMargin() {
   }
 }
 
-// загрузка
 document.addEventListener('DOMContentLoaded', adjustMainMargin);
-
-// после полной загрузки страницы (шрифты, картинки и т.д.)
 window.addEventListener('load', adjustMainMargin);
-
-// ресайз
 window.addEventListener('resize', adjustMainMargin);
-
-
 
 // Настройки слайдеров. Добавить для нужной картинки id="slider1" (slider2, slider3 и т.д.)
 const sliders = [
