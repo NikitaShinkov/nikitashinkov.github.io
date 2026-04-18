@@ -158,12 +158,7 @@ h2 {
 
 
 .profile, .profile_main {
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000; /* чтобы шапка была поверх всего */
-  transform: translateY(0);       /* начальное положение */
-  transition: transform 0.2s ease;
+  transform: translateY(0);
   
   max-width: 1400px;
   margin: 0 auto;
