@@ -2,7 +2,6 @@ let lastScroll = window.pageYOffset;
 
 const staticHeader = document.querySelector('header');
 
-// создаём фиксированный дубликат
 const floatingHeader = staticHeader.cloneNode(true);
 
 floatingHeader.style.position = 'fixed';
@@ -11,23 +10,23 @@ floatingHeader.style.left = '0';
 floatingHeader.style.right = '0';
 floatingHeader.style.zIndex = '9999';
 
-// ВАЖНО: не трогаем height вообще
-floatingHeader.style.transform = 'translateY(-100%)';
+floatingHeader.style.transform = 'translateY(0)';
 floatingHeader.style.transition = 'none';
-
-// защита от влияния layout оригинала
 floatingHeader.style.pointerEvents = 'none';
 
 document.body.appendChild(floatingHeader);
 
+// ======================
 const SHOW_AFTER_HEIGHTS = 4;
 const SHOW_TRIGGER = 20;
 
 const ANIMATION_SPEED = 0.25;
 const EASING = 'ease-out';
 
+// ======================
 let headerHeight = staticHeader.getBoundingClientRect().height;
 
+let hiddenOffset = 0;
 let upScrollAccumulated = 0;
 let isVisible = false;
 
@@ -38,8 +37,11 @@ window.addEventListener('scroll', () => {
 
   const showLimit = SHOW_AFTER_HEIGHTS * headerHeight;
 
-  // верх страницы
+  // ======================
+  // ВВЕРХ СТРАНИЦЫ
+  // ======================
   if (currentScroll <= 0) {
+    hiddenOffset = 0;
     upScrollAccumulated = 0;
     isVisible = false;
 
@@ -50,16 +52,26 @@ window.addEventListener('scroll', () => {
     return;
   }
 
-  // вниз
+  // ======================
+  // СКРОЛЛ ВНИЗ → ДВИЖЕМ HEADER ВМЕСТЕ СО СКРОЛЛОМ
+  // ======================
   if (delta > 0) {
     upScrollAccumulated = 0;
     isVisible = false;
 
-    floatingHeader.style.transition = 'transform 0.2s ease';
-    floatingHeader.style.transform = 'translateY(-100%)';
+    hiddenOffset += delta;
+
+    if (hiddenOffset > headerHeight) {
+      hiddenOffset = headerHeight;
+    }
+
+    floatingHeader.style.transition = 'none';
+    floatingHeader.style.transform = `translateY(-${hiddenOffset}px)`;
   }
 
-  // вверх
+  // ======================
+  // СКРОЛЛ ВВЕРХ → показываем с анимацией
+  // ======================
   else if (delta < 0) {
     if (currentScroll <= showLimit) {
       lastScroll = currentScroll;
@@ -71,6 +83,8 @@ window.addEventListener('scroll', () => {
     if (!isVisible && upScrollAccumulated >= SHOW_TRIGGER) {
       isVisible = true;
 
+      hiddenOffset = 0;
+
       floatingHeader.style.transition = `transform ${ANIMATION_SPEED}s ${EASING}`;
       floatingHeader.style.transform = 'translateY(0)';
     }
@@ -79,9 +93,6 @@ window.addEventListener('scroll', () => {
   lastScroll = currentScroll;
 });
 
-
-// ======================
-// resize / load
 // ======================
 function updateHeaderHeight() {
   headerHeight = staticHeader.getBoundingClientRect().height;
