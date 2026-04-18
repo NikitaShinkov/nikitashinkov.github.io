@@ -18,11 +18,11 @@ floatingHeader.style.transform = 'translateY(-100%)';
 floatingHeader.style.pointerEvents = 'auto'; // теперь кликабельно
 
 /* отладка */
-// floatingHeader.style.background = 'rgba(255, 0, 0, 0.5)'; // красный 50%
-// floatingHeader.style.opacity = '1';
-// floatingHeader.querySelectorAll('*').forEach(el => {
-//   el.style.backgroundColor = 'transparent';
-// });
+floatingHeader.style.background = 'rgba(255, 0, 0, 0.5)'; // красный 50%
+floatingHeader.style.opacity = '1';
+floatingHeader.querySelectorAll('*').forEach(el => {
+  el.style.backgroundColor = 'transparent';
+});
 /* конец отладки */
 
 document.body.appendChild(floatingHeader);
@@ -103,6 +103,18 @@ window.addEventListener('scroll', () => {
     upScrollAccumulated = 0;
     isVisible = false;
 
+    // В верхней безопасной зоне дубликат вообще не показываем
+    if (currentScroll <= showLimit) {
+      hiddenOffset = headerHeight + EXTRA_HIDE_OFFSET;
+
+      floatingHeader.style.transition = 'none';
+      floatingHeader.style.transform =
+        `translateY(-${hiddenOffset}px)`;
+
+      lastScroll = currentScroll;
+      return;
+    }
+
     hiddenOffset += delta;
 
     if (hiddenOffset > headerHeight + EXTRA_HIDE_OFFSET) {
@@ -122,14 +134,17 @@ window.addEventListener('scroll', () => {
     // Пока не дошли до зоны появления —
     // дубликат двигается вместе с исходной шапкой
     if (currentScroll <= showLimit) {
-      upScrollAccumulated = 0;
-      isVisible = false;
 
-      hiddenOffset += delta; // delta отрицательный
-
-      if (hiddenOffset < 0) {
-        hiddenOffset = 0;
+      // Если дубликат уже был показан ниже зоны —
+      // оставляем его видимым
+      if (isVisible) {
+        lastScroll = currentScroll;
+        return;
       }
+
+      // Если показ ещё не начинался — держим скрытым
+      upScrollAccumulated = 0;
+      hiddenOffset = headerHeight + EXTRA_HIDE_OFFSET;
 
       floatingHeader.style.transition = 'none';
       floatingHeader.style.transform =
