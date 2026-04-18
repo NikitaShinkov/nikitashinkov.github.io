@@ -158,7 +158,6 @@ h2 {
 
 
 .profile, .profile_main {
-  position: fixed;   /* шапка фиксируется на экране при показе */
   top: 0;
   left: 0;
   right: 0;

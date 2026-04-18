@@ -1,62 +1,65 @@
 let lastScroll = window.pageYOffset;
-const header = document.querySelector('header');
+
+const staticHeader = document.querySelector('header');
+
+// создаём фиксированный дубликат
+const floatingHeader = staticHeader.cloneNode(true);
+
+floatingHeader.style.position = 'fixed';
+floatingHeader.style.top = '0';
+floatingHeader.style.left = '0';
+floatingHeader.style.right = '0';
+floatingHeader.style.zIndex = '9999';
+
+// ВАЖНО: не трогаем height вообще
+floatingHeader.style.transform = 'translateY(-100%)';
+floatingHeader.style.transition = 'none';
+
+// защита от влияния layout оригинала
+floatingHeader.style.pointerEvents = 'none';
+
+document.body.appendChild(floatingHeader);
 
 const SHOW_AFTER_HEIGHTS = 4;
-const SHOW_TRIGGER = 20; // NEW: порог для запуска анимации
+const SHOW_TRIGGER = 20;
 
 const ANIMATION_SPEED = 0.25;
 const EASING = 'ease-out';
 
-let headerHeight = header.offsetHeight;
-let hiddenOffset = 0;
+let headerHeight = staticHeader.getBoundingClientRect().height;
 
 let upScrollAccumulated = 0;
-let isShowing = false;
+let isVisible = false;
 
-header.style.transform = 'translateY(0)';
-header.style.transition = 'none';
-
+// ======================
 window.addEventListener('scroll', () => {
   const currentScroll = window.pageYOffset;
   const delta = currentScroll - lastScroll;
 
   const showLimit = SHOW_AFTER_HEIGHTS * headerHeight;
 
-  // ======================
   // верх страницы
-  // ======================
   if (currentScroll <= 0) {
-    hiddenOffset = 0;
     upScrollAccumulated = 0;
-    isShowing = false;
+    isVisible = false;
 
-    header.style.transition = 'none';
-    header.style.transform = 'translateY(0)';
+    floatingHeader.style.transition = 'none';
+    floatingHeader.style.transform = 'translateY(-100%)';
 
     lastScroll = currentScroll;
     return;
   }
 
-  // ======================
-  // вниз → без анимации
-  // ======================
+  // вниз
   if (delta > 0) {
     upScrollAccumulated = 0;
-    isShowing = false;
+    isVisible = false;
 
-    hiddenOffset += delta;
-
-    if (hiddenOffset > headerHeight) {
-      hiddenOffset = headerHeight;
-    }
-
-    header.style.transition = 'none';
-    header.style.transform = `translateY(-${hiddenOffset}px)`;
+    floatingHeader.style.transition = 'transform 0.2s ease';
+    floatingHeader.style.transform = 'translateY(-100%)';
   }
 
-  // ======================
-  // вверх → сначала копим 20px
-  // ======================
+  // вверх
   else if (delta < 0) {
     if (currentScroll <= showLimit) {
       lastScroll = currentScroll;
@@ -65,35 +68,29 @@ window.addEventListener('scroll', () => {
 
     upScrollAccumulated += Math.abs(delta);
 
-    // ======================
-    // запуск анимации ОДИН РАЗ
-    // ======================
-    if (!isShowing && upScrollAccumulated >= SHOW_TRIGGER) {
-      isShowing = true;
+    if (!isVisible && upScrollAccumulated >= SHOW_TRIGGER) {
+      isVisible = true;
 
-      hiddenOffset = 0;
-
-      header.style.transition = `transform ${ANIMATION_SPEED}s ${EASING}`;
-      header.style.transform = 'translateY(0)';
+      floatingHeader.style.transition = `transform ${ANIMATION_SPEED}s ${EASING}`;
+      floatingHeader.style.transform = 'translateY(0)';
     }
   }
 
   lastScroll = currentScroll;
 });
 
-function adjustMainMargin() {
-  const header = document.querySelector('header');
-  const main = document.querySelector('main');
 
-  if (header && main) {
-    headerHeight = header.offsetHeight;
-    main.style.marginTop = headerHeight + 'px';
-  }
+// ======================
+// resize / load
+// ======================
+function updateHeaderHeight() {
+  headerHeight = staticHeader.getBoundingClientRect().height;
 }
 
-document.addEventListener('DOMContentLoaded', adjustMainMargin);
-window.addEventListener('load', adjustMainMargin);
-window.addEventListener('resize', adjustMainMargin);
+document.addEventListener('DOMContentLoaded', updateHeaderHeight);
+window.addEventListener('load', updateHeaderHeight);
+window.addEventListener('resize', updateHeaderHeight);
+
 
 // Настройки слайдеров. Добавить для нужной картинки id="slider1" (slider2, slider3 и т.д.)
 const sliders = [
