@@ -1,20 +1,37 @@
-let lastScroll = 0;
+let lastScroll = window.pageYOffset;
 const header = document.querySelector('.profile, .profile_main');
+
+let headerHeight = header.offsetHeight;
+let hiddenOffset = 0; // насколько шапка скрыта в px
 
 window.addEventListener('scroll', () => {
   const currentScroll = window.pageYOffset;
+  const delta = currentScroll - lastScroll;
 
+  // если в самом верху страницы — показываем полностью
   if (currentScroll <= 0) {
-    // в начале страницы показываем шапку
+    hiddenOffset = 0;
+    header.style.transition = 'transform 0.3s ease';
     header.style.transform = 'translateY(0)';
+    lastScroll = currentScroll;
     return;
   }
 
-  if (currentScroll > lastScroll) {
-    // скролл вниз → скрываем шапку
-    header.style.transform = 'translateY(-100%)';
-  } else {
-    // скролл вверх → показываем шапку
+  if (delta > 0) {
+    // скролл вниз → скрываем плавно по пикселям
+    hiddenOffset += delta;
+
+    if (hiddenOffset > headerHeight) {
+      hiddenOffset = headerHeight;
+    }
+
+    header.style.transition = 'none';
+    header.style.transform = `translateY(-${hiddenOffset}px)`;
+
+  } else if (delta < 0) {
+    // скролл вверх → показываем полностью с анимацией
+    hiddenOffset = 0;
+    header.style.transition = 'transform 0.35s ease';
     header.style.transform = 'translateY(0)';
   }
 
@@ -27,16 +44,19 @@ function adjustMainMargin() {
   const main = document.querySelector('main');
 
   if (header && main) {
-    const headerHeight = header.offsetHeight; // получаем реальную высоту шапки
-    main.style.marginTop = headerHeight + 'px'; // добавляем margin-top
+    headerHeight = header.offsetHeight;
+    main.style.marginTop = headerHeight + 'px';
   }
 }
 
-// вызываем при загрузке страницы
+// загрузка
 document.addEventListener('DOMContentLoaded', adjustMainMargin);
 
-// вызываем при изменении размера окна, если шапка адаптивная
-window.addEventListener('resize', adjustMainMargin)
+// после полной загрузки страницы (шрифты, картинки и т.д.)
+window.addEventListener('load', adjustMainMargin);
+
+// ресайз
+window.addEventListener('resize', adjustMainMargin);
 
 
 
