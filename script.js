@@ -1,12 +1,16 @@
 let lastScroll = window.pageYOffset;
-const header = document.querySelector('.profile, .profile_main');
+const header = document.querySelector('header');
 
-const SHOW_TRIGGER = 20;
 const SHOW_AFTER_HEIGHTS = 4;
+
+const ANIMATION_SPEED = 0.25;
+const EASING = 'ease-out';
 
 let headerHeight = header.offsetHeight;
 let hiddenOffset = 0;
-let upScrollAccumulated = 0;
+
+header.style.transform = 'translateY(0)';
+header.style.transition = 'none';
 
 window.addEventListener('scroll', () => {
   const currentScroll = window.pageYOffset;
@@ -14,22 +18,23 @@ window.addEventListener('scroll', () => {
 
   const showLimit = SHOW_AFTER_HEIGHTS * headerHeight;
 
+  // ======================
   // верх страницы
+  // ======================
   if (currentScroll <= 0) {
     hiddenOffset = 0;
-    upScrollAccumulated = 0;
-    header.style.transition = 'transform 0.2s ease';
+
+    header.style.transition = 'none';
     header.style.transform = 'translateY(0)';
+
     lastScroll = currentScroll;
     return;
   }
 
   // ======================
-  // вниз
+  // вниз → без анимации
   // ======================
   if (delta > 0) {
-    upScrollAccumulated = 0;
-
     hiddenOffset += delta;
 
     if (hiddenOffset > headerHeight) {
@@ -41,47 +46,27 @@ window.addEventListener('scroll', () => {
   }
 
   // ======================
-  // вверх
+  // вверх → с анимацией
   // ======================
   else if (delta < 0) {
-
-    const canShowHeader = currentScroll > showLimit;
-
-    console.log(
-      'scrollY:', currentScroll,
-      '| limit:', showLimit,
-      '| show header:', canShowHeader
-    );
-
-    // частично скрыт
-    if (hiddenOffset > 0 && hiddenOffset < headerHeight) {
-      hiddenOffset += delta;
-      
-      if (hiddenOffset < 0) hiddenOffset = 0;
-
-      header.style.transition = 'none';
-      header.style.transform = `translateY(-${hiddenOffset}px)`;
+    if (currentScroll <= showLimit) {
+      lastScroll = currentScroll;
+      return;
     }
 
-    // полностью скрыт
-    else if (hiddenOffset >= headerHeight) {
-      upScrollAccumulated += Math.abs(delta);
+    hiddenOffset += delta;
+    if (hiddenOffset < 0) hiddenOffset = 0;
 
-      if (upScrollAccumulated >= SHOW_TRIGGER && canShowHeader) {
-        hiddenOffset = 0;
-        upScrollAccumulated = 0;
-
-        header.style.transition = 'transform 0.35s ease';
-        header.style.transform = 'translateY(0)';
-      }
-    }
+    header.style.transition = `transform ${ANIMATION_SPEED}s ${EASING}`;
+    header.style.transform = `translateY(-${hiddenOffset}px)`;
   }
 
   lastScroll = currentScroll;
 });
 
+
 function adjustMainMargin() {
-  const header = document.querySelector('.profile, .profile_main');
+  const header = document.querySelector('header');
   const main = document.querySelector('main');
 
   if (header && main) {
