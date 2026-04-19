@@ -18,11 +18,11 @@ floatingHeader.style.transform = 'translateY(-100%)';
 floatingHeader.style.pointerEvents = 'auto'; // теперь кликабельно
 
 /* отладка */
-floatingHeader.style.background = 'rgba(255, 0, 0, 0.5)'; // красный 50%
-floatingHeader.style.opacity = '1';
-floatingHeader.querySelectorAll('*').forEach(el => {
-  el.style.backgroundColor = 'transparent';
-});
+// floatingHeader.style.background = 'rgba(255, 0, 0, 0.5)'; // красный 50%
+// floatingHeader.style.opacity = '1';
+// floatingHeader.querySelectorAll('*').forEach(el => {
+//   el.style.backgroundColor = 'transparent';
+// });
 /* конец отладки */
 
 document.body.appendChild(floatingHeader);
@@ -43,6 +43,7 @@ let headerHeight = staticHeader.getBoundingClientRect().height;
 let hiddenOffset = 0;
 let upScrollAccumulated = 0;
 let isVisible = false;
+let isDragging = false;
 
 // ======================
 // КОПИРУЕМ ОТСТУПЫ BODY
@@ -102,69 +103,44 @@ window.addEventListener('scroll', () => {
   if (delta > 0) {
     upScrollAccumulated = 0;
 
-    // В верхней безопасной зоне дубликат вообще не показываем
-    if (currentScroll <= showLimit) {
+    const maxOffset = headerHeight + EXTRA_HIDE_OFFSET;
 
-      // Если дубликат уже отображается —
-      // уводим вверх вместе со скроллом
-      if (isVisible) {
-        hiddenOffset += delta;
+    // если дубликат уже открыт или частично открыт — просто двигаем вверх
+    if (hiddenOffset < maxOffset) {
+      isDragging = true;
 
-        if (hiddenOffset > headerHeight + EXTRA_HIDE_OFFSET) {
-          hiddenOffset = headerHeight + EXTRA_HIDE_OFFSET;
-          isVisible = false;
-        }
+      hiddenOffset += delta;
 
-        floatingHeader.style.transition = 'none';
-        floatingHeader.style.transform =
-          `translateY(-${hiddenOffset}px)`;
-
-        lastScroll = currentScroll;
-        return;
+      if (hiddenOffset > maxOffset) {
+        hiddenOffset = maxOffset;
+        isVisible = false;
+        isDragging = false;
       }
-
-      // Если не отображается — просто скрыт
-      hiddenOffset = headerHeight + EXTRA_HIDE_OFFSET;
 
       floatingHeader.style.transition = 'none';
       floatingHeader.style.transform =
         `translateY(-${hiddenOffset}px)`;
-
-      lastScroll = currentScroll;
-      return;
     }
 
-    hiddenOffset += delta;
-
-    if (hiddenOffset > headerHeight + EXTRA_HIDE_OFFSET) {
-      hiddenOffset = headerHeight + EXTRA_HIDE_OFFSET;
-      isVisible = false;
-    }
-    
-    floatingHeader.style.transition = 'none';
-    floatingHeader.style.transform =
-      `translateY(-${hiddenOffset}px)`;
+    lastScroll = currentScroll;
+    return;
   }
 
   // ======================
   // СКРОЛЛ ВВЕРХ
   // ======================
   else if (delta < 0) {
+    const maxOffset = headerHeight + EXTRA_HIDE_OFFSET;
 
-    // Пока не дошли до зоны появления —
-    // дубликат двигается вместе с исходной шапкой
-    if (currentScroll <= showLimit) {
+    // если мы частично скрываем header (он "едет") — продолжаем движение вниз
+    if (hiddenOffset > 0 && hiddenOffset < maxOffset) {
+      isDragging = true;
 
-      // Если дубликат уже был показан ниже зоны —
-      // оставляем его видимым
-      if (isVisible) {
-        lastScroll = currentScroll;
-        return;
+      hiddenOffset += delta; // delta отрицательный → вниз
+
+      if (hiddenOffset < 0) {
+        hiddenOffset = 0;
       }
-
-      // Если показ ещё не начинался — держим скрытым
-      upScrollAccumulated = 0;
-      hiddenOffset = headerHeight + EXTRA_HIDE_OFFSET;
 
       floatingHeader.style.transition = 'none';
       floatingHeader.style.transform =
@@ -174,18 +150,22 @@ window.addEventListener('scroll', () => {
       return;
     }
 
-    // Ниже зоны появления — начинаем считать движение вверх
-    upScrollAccumulated += Math.abs(delta);
+    // обычное появление
+    if (currentScroll > showLimit) {
+      upScrollAccumulated += Math.abs(delta);
 
-    if (!isVisible && upScrollAccumulated >= SHOW_TRIGGER) {
-      isVisible = true;
-      hiddenOffset = 0;
+      if (!isVisible && upScrollAccumulated >= SHOW_TRIGGER) {
+        isVisible = true;
+        hiddenOffset = 0;
 
-      floatingHeader.style.transition =
-        `transform ${ANIMATION_SPEED}s ${EASING}`;
+        floatingHeader.style.transition =
+          `transform ${ANIMATION_SPEED}s ${EASING}`;
 
-      floatingHeader.style.transform = 'translateY(0)';
+        floatingHeader.style.transform = 'translateY(0)';
+      }
     }
+
+    lastScroll = currentScroll;
   }
 
   lastScroll = currentScroll;
