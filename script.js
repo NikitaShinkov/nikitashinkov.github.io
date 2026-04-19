@@ -101,10 +101,29 @@ window.addEventListener('scroll', () => {
   // ======================
   if (delta > 0) {
     upScrollAccumulated = 0;
-    isVisible = false;
 
     // В верхней безопасной зоне дубликат вообще не показываем
     if (currentScroll <= showLimit) {
+
+      // Если дубликат уже отображается —
+      // уводим вверх вместе со скроллом
+      if (isVisible) {
+        hiddenOffset += delta;
+
+        if (hiddenOffset > headerHeight + EXTRA_HIDE_OFFSET) {
+          hiddenOffset = headerHeight + EXTRA_HIDE_OFFSET;
+          isVisible = false;
+        }
+
+        floatingHeader.style.transition = 'none';
+        floatingHeader.style.transform =
+          `translateY(-${hiddenOffset}px)`;
+
+        lastScroll = currentScroll;
+        return;
+      }
+
+      // Если не отображается — просто скрыт
       hiddenOffset = headerHeight + EXTRA_HIDE_OFFSET;
 
       floatingHeader.style.transition = 'none';
@@ -119,8 +138,9 @@ window.addEventListener('scroll', () => {
 
     if (hiddenOffset > headerHeight + EXTRA_HIDE_OFFSET) {
       hiddenOffset = headerHeight + EXTRA_HIDE_OFFSET;
+      isVisible = false;
     }
-
+    
     floatingHeader.style.transition = 'none';
     floatingHeader.style.transform =
       `translateY(-${hiddenOffset}px)`;
