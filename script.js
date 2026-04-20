@@ -190,6 +190,42 @@ window.addEventListener('resize', () => {
   syncFloatingHeaderOffsets();
 });
 
+
+// ======================
+// СХЛОПЫВАНИЕ ТЕКСТА В HEADER
+// ======================
+
+const TEXT_COLLAPSE_DISTANCE = 120;
+
+const textBlocks = document.querySelectorAll('.hide_text_on_scroll');
+
+function updateHeaderTextCollapse() {
+  const y = window.pageYOffset;
+
+  // 0..1
+  const progress = Math.min(y / TEXT_COLLAPSE_DISTANCE, 1);
+
+  textBlocks.forEach(el => {
+    const fullHeight = el.scrollHeight;
+
+    if (progress >= 1) {
+      el.classList.add('collapsed');
+      el.style.maxHeight = '0px';
+      el.style.opacity = '0';
+    } else {
+      el.classList.remove('collapsed');
+
+      el.style.maxHeight = `${fullHeight * (1 - progress)}px`;
+      el.style.opacity = `${1 - progress}`;
+    }
+  });
+}
+
+window.addEventListener('scroll', updateHeaderTextCollapse, { passive: true });
+window.addEventListener('load', updateHeaderTextCollapse);
+window.addEventListener('resize', updateHeaderTextCollapse);
+
+
 // Настройки слайдеров. Добавить для нужной картинки id="slider1" (slider2, slider3 и т.д.)
 const sliders = [
   {

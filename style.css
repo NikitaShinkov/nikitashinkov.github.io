@@ -136,8 +136,25 @@ h2 {
 
 .hide_text_on_scroll {
   text-box: normal !important;
+
+  overflow: hidden;
+  max-height: 200px;
+  opacity: 1;
+
+  transform-origin: top;
+
+  transition:
+    max-height 0.28s ease,
+    opacity 0.18s ease,
+    margin 0.28s ease;
 }
 
+.hide_text_on_scroll.collapsed {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
 
 
 
