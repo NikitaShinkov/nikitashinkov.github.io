@@ -202,7 +202,6 @@ const textBlocks = document.querySelectorAll('.hide_text_on_scroll');
 function updateHeaderTextCollapse() {
   const y = window.pageYOffset;
 
-  // 0..1
   const progress = Math.min(y / TEXT_COLLAPSE_DISTANCE, 1);
 
   textBlocks.forEach(el => {
@@ -214,12 +213,27 @@ function updateHeaderTextCollapse() {
       el.style.opacity = '0';
     } else {
       el.classList.remove('collapsed');
-
       el.style.maxHeight = `${fullHeight * (1 - progress)}px`;
       el.style.opacity = `${1 - progress}`;
     }
   });
+
+  updateHeaderHeight();
+
+  const maxOffset = headerHeight + EXTRA_HIDE_OFFSET;
+
+  if (hiddenOffset > maxOffset) {
+    hiddenOffset = maxOffset;
+  }
+
+  if (!isVisible) {
+    floatingHeader.style.transform =
+      `translateY(-${hiddenOffset}px)`;
+  }
+
+  syncFloatingHeaderOffsets();
 }
+
 
 window.addEventListener('scroll', updateHeaderTextCollapse, { passive: true });
 window.addEventListener('load', updateHeaderTextCollapse);
