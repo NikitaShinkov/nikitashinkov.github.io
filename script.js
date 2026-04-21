@@ -53,6 +53,10 @@ let textCollapsed = false;
 // ======================
 const textBlocks = document.querySelectorAll('.hide_text_on_scroll');
 
+const headerBlocks = document.querySelectorAll('.profile_main');
+const contactsBlocks = document.querySelectorAll('.profile_text_contacts');
+const rowMainBlocks = document.querySelectorAll('.profile_row_main');
+
 // ======================
 // HEADER HELPERS
 // ======================
@@ -93,22 +97,70 @@ function hideInstant() {
 }
 
 // ======================
-// TEXT (FIXED)
+// TEXT + HEADER ANIMATION
 // ======================
 function collapseText() {
   if (textCollapsed) return;
   textCollapsed = true;
 
-  textBlocks.forEach(el => el.classList.add('collapsed'));
+  textBlocks.forEach(el => {
+    el.classList.add('collapsed');
+
+    // ждём завершения анимации и скрываем из layout
+    const onEnd = (e) => {
+      if (e.propertyName !== 'grid-template-rows') return;
+
+      if (textCollapsed) {
+        el.style.display = 'none';
+      }
+
+      el.removeEventListener('transitionend', onEnd);
+    };
+
+    el.addEventListener('transitionend', onEnd);
+  });
+
+  headerBlocks.forEach(el => {
+    el.style.transition = `padding ${ANIMATION_SPEED}s ${EASING}`;
+    el.style.padding = '6px 0';
+  });
+
+  contactsBlocks.forEach(el => {
+    el.style.transition = `gap ${ANIMATION_SPEED}s ${EASING}`;
+    el.style.gap = '6px';
+  });
+
+  rowMainBlocks.forEach(el => {
+    el.style.transition = `align-items ${ANIMATION_SPEED}s ${EASING}`;
+    el.style.alignItems = 'center';
+  });
 }
 
 function expandText() {
   if (!textCollapsed) return;
   textCollapsed = false;
 
-  textBlocks.forEach(el => el.classList.remove('collapsed'));
-}
+  textBlocks.forEach(el => {
+    el.style.display = 'grid'; // сначала возвращаем в layout
+    requestAnimationFrame(() => {
+      el.classList.remove('collapsed');
+    });
+  });
 
+  headerBlocks.forEach(el => {
+    el.style.transition = `padding ${ANIMATION_SPEED}s ${EASING}`;
+    el.style.padding = '16px 0 12px';
+  });
+
+  contactsBlocks.forEach(el => {
+    el.style.transition = `gap ${ANIMATION_SPEED}s ${EASING}`;
+    el.style.gap = '10px';
+  });
+
+  rowMainBlocks.forEach(el => {
+    el.style.alignItems = 'flex-start';
+  });
+}
 // ======================
 // MAIN LOOP
 // ======================
@@ -173,7 +225,7 @@ function update() {
   }
 
   // ======================
-  // TEXT ZONE LOGIC (FIXED)
+  // TEXT ZONE LOGIC
   // ======================
   if (y < textZone) {
     if (delta > 0) collapseText();
@@ -220,6 +272,7 @@ window.addEventListener('resize', () => {
   syncOffsets();
   update();
 });
+
 
 // Настройки слайдеров. Добавить для нужной картинки id="slider1" (slider2, slider3 и т.д.)
 const sliders = [
