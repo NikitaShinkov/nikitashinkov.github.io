@@ -175,82 +175,41 @@ window.addEventListener('resize', () => {
 });
 
 // ======================
-// TEXT COLLAPSE SYSTEM (FIXED)
+// TEXT COLLAPSE SYSTEM
 // ======================
-
 const TEXT_COLLAPSE_HEIGHTS = 2;
-
-const TEXT_COLLAPSE_DURATION = 280;
-const TEXT_EXPAND_DURATION = 320;
-
-const TEXT_EASING = 'ease';
-
 const textBlocks = document.querySelectorAll('.hide_text_on_scroll');
 
 let textCollapsed = false;
 let lastScrollText = window.pageYOffset;
 
-// ----------------------
-// helper
-// ----------------------
-function setTextTransition(duration) {
-  textBlocks.forEach(el => {
-    el.style.transition =
-      `max-height ${duration}ms ${TEXT_EASING},
-       opacity ${duration}ms ${TEXT_EASING}`;
-  });
-}
-
-// ----------------------
-// collapse
-// ----------------------
+// ======================
+// COLLAPSE
+// ======================
 function collapseHeaderText() {
   if (textCollapsed) return;
-
   textCollapsed = true;
 
-  setTextTransition(TEXT_COLLAPSE_DURATION);
-
   textBlocks.forEach(el => {
-    const h = el.scrollHeight;
-
-    el.style.maxHeight = h + 'px';
-    el.style.opacity = '1';
-
-    requestAnimationFrame(() => {
-      el.style.maxHeight = '0px';
-      el.style.opacity = '0';
-      el.classList.add('collapsed');
-    });
+    el.classList.add('collapsed');
   });
 }
 
-// ----------------------
-// expand
-// ----------------------
+// ======================
+// EXPAND
+// ======================
 function expandHeaderText() {
   if (!textCollapsed) return;
-
   textCollapsed = false;
 
-  setTextTransition(TEXT_EXPAND_DURATION);
-
   textBlocks.forEach(el => {
-    const h = el.scrollHeight;
-
     el.classList.remove('collapsed');
-    el.style.maxHeight = h + 'px';
-    el.style.opacity = '1';
-
-    setTimeout(() => {
-      el.style.maxHeight = 'none';
-    }, TEXT_EXPAND_DURATION);
   });
 }
 
-// ----------------------
-// MAIN LOGIC
-// ----------------------
+// ======================
+// SCROLL LOGIC (ZONE = 2 HEADER HEIGHTS)
+// ======================
 function handleTextScroll() {
   const y = window.pageYOffset;
   const delta = y - lastScrollText;
@@ -266,11 +225,8 @@ function handleTextScroll() {
 
   // INSIDE ZONE → reactive
   if (y < zone) {
-    if (delta > 0) {
-      collapseHeaderText();
-    } else if (delta < 0) {
-      expandHeaderText();
-    }
+    if (delta > 0) collapseHeaderText();
+    else if (delta < 0) expandHeaderText();
 
     lastScrollText = y;
     return;
@@ -282,17 +238,14 @@ function handleTextScroll() {
   lastScrollText = y;
 }
 
-// ----------------------
-// INIT (REPLACE OLD)
-// ----------------------
+// ======================
+// INIT HOOKS (ВСТАВЬ В ОБЩИЙ INIT)
+// ======================
 window.addEventListener('scroll', handleTextScroll, { passive: true });
 
-window.addEventListener('load', () => {
-  handleTextScroll();
-});
+window.addEventListener('load', handleTextScroll);
 
 window.addEventListener('resize', () => {
-  updateHeaderHeight();
   handleTextScroll();
 });
 

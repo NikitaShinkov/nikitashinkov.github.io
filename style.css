@@ -137,28 +137,32 @@ h2 {
 .hide_text_on_scroll {
   text-box: normal !important;
 
-  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr;
 
-  max-height: none; /* важно: убираем фикс 200px */
   opacity: 1;
 
-  transform-origin: top;
-
-  will-change: max-height, opacity;
-  backface-visibility: hidden;
-
-  transition: none;
-}
-
-/* состояние свернуто */
-.hide_text_on_scroll.collapsed {
   overflow: hidden;
 
-  /* важно: НЕ используем margin */
-  max-height: 0;
+  will-change: grid-template-rows, opacity;
+  backface-visibility: hidden;
+
+  transition:
+    grid-template-rows 300ms cubic-bezier(.2,.8,.2,1),
+    opacity 300ms cubic-bezier(.2,.8,.2,1);
+}
+
+/* свернуто */
+.hide_text_on_scroll.collapsed {
+  grid-template-rows: 0fr;
   opacity: 0;
 }
 
+/* ВАЖНО: внутренний контейнер */
+.hide_text_on_scroll > * {
+  min-height: 0;
+  text-box: initial !important;
+}
 
 
 .profile_info {
