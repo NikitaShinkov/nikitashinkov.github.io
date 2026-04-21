@@ -27,33 +27,35 @@ Object.assign(floatingHeader.style, {
 document.body.appendChild(floatingHeader);
 
 // ======================
+// CONFIG
+// ======================
 const SHOW_AFTER_HEIGHTS = 4;
 const SHOW_TRIGGER = 20;
 const ANIMATION_SPEED = 0.25;
 const EASING = 'ease-out';
 const EXTRA_HIDE_OFFSET = 4;
 
+const TEXT_COLLAPSE_HEIGHTS = 2;
+
 // ======================
-let headerHeight = staticHeader.getBoundingClientRect().height;
+// STATE
+// ======================
+let headerHeight = 0;
 
 let hiddenOffset = 0;
 let upScrollAccumulated = 0;
 let isVisible = false;
 
+let textCollapsed = false;
+
 // ======================
-function syncFloatingHeaderOffsets() {
-  const s = getComputedStyle(body);
+// ELEMENTS
+// ======================
+const textBlocks = document.querySelectorAll('.hide_text_on_scroll');
 
-  floatingHeader.style.top =
-    (parseFloat(s.paddingTop) || 0) + (parseFloat(s.marginTop) || 0) + 'px';
-
-  floatingHeader.style.left =
-    (parseFloat(s.paddingLeft) || 0) + (parseFloat(s.marginLeft) || 0) + 'px';
-
-  floatingHeader.style.right =
-    (parseFloat(s.paddingRight) || 0) + (parseFloat(s.marginRight) || 0) + 'px';
-}
-
+// ======================
+// HEADER HELPERS
+// ======================
 function updateHeaderHeight() {
   headerHeight = staticHeader.getBoundingClientRect().height;
 }
@@ -67,6 +69,22 @@ function applyTransform() {
     `translate3d(0,-${hiddenOffset}px,0)`;
 }
 
+function syncOffsets() {
+  const s = getComputedStyle(body);
+
+  floatingHeader.style.top =
+    (parseFloat(s.paddingTop) || 0) +
+    (parseFloat(s.marginTop) || 0) + 'px';
+
+  floatingHeader.style.left =
+    (parseFloat(s.paddingLeft) || 0) +
+    (parseFloat(s.marginLeft) || 0) + 'px';
+
+  floatingHeader.style.right =
+    (parseFloat(s.paddingRight) || 0) +
+    (parseFloat(s.marginRight) || 0) + 'px';
+}
+
 function hideInstant() {
   hiddenOffset = maxOffset();
   floatingHeader.style.transition = 'none';
@@ -75,13 +93,34 @@ function hideInstant() {
 }
 
 // ======================
-// MAIN SCROLL
+// TEXT (FIXED)
 // ======================
-window.addEventListener('scroll', () => {
+function collapseText() {
+  if (textCollapsed) return;
+  textCollapsed = true;
+
+  textBlocks.forEach(el => el.classList.add('collapsed'));
+}
+
+function expandText() {
+  if (!textCollapsed) return;
+  textCollapsed = false;
+
+  textBlocks.forEach(el => el.classList.remove('collapsed'));
+}
+
+// ======================
+// MAIN LOOP
+// ======================
+function update() {
   const y = window.pageYOffset;
   const delta = y - lastScroll;
 
+  updateHeaderHeight();
+
+  const max = maxOffset();
   const showLimit = SHOW_AFTER_HEIGHTS * headerHeight;
+  const textZone = headerHeight * TEXT_COLLAPSE_HEIGHTS;
 
   // ======================
   // TOP RESET
@@ -94,50 +133,30 @@ window.addEventListener('scroll', () => {
     floatingHeader.style.transition = 'none';
     floatingHeader.style.transform = 'translate3d(0,-100%,0)';
 
+    expandText();
+
     lastScroll = y;
     return;
   }
 
-  const max = maxOffset();
-
   // ======================
-  // SCROLL DOWN → ALWAYS COLLAPSE
+  // HEADER
   // ======================
   if (delta > 0) {
     upScrollAccumulated = 0;
 
-    // ключевое исправление:
-    // ВСЕГДА увеличиваем hiddenOffset при scroll down
     hiddenOffset = Math.min(hiddenOffset + delta, max);
-
-    floatingHeader.style.transition = 'none';
     applyTransform();
 
-    if (hiddenOffset >= max) {
-      isVisible = false;
-    }
+    isVisible = hiddenOffset < max;
 
-    lastScroll = y;
-    return;
-  }
+  } else if (delta < 0) {
 
-  // ======================
-  // SCROLL UP → REVEAL
-  // ======================
-  if (delta < 0) {
-
-    // если header частично скрыт — продолжаем движение
     if (hiddenOffset > 0) {
       hiddenOffset = Math.max(0, hiddenOffset + delta);
-
-      floatingHeader.style.transition = 'none';
       applyTransform();
-
-      lastScroll = y;
-      return;
     }
 
-    // обычное появление
     if (y > showLimit) {
       upScrollAccumulated += Math.abs(delta);
 
@@ -153,17 +172,44 @@ window.addEventListener('scroll', () => {
     }
   }
 
+  // ======================
+  // TEXT ZONE LOGIC (FIXED)
+  // ======================
+  if (y < textZone) {
+    if (delta > 0) collapseText();
+    else if (delta < 0) expandText();
+  } else {
+    collapseText();
+  }
+
   lastScroll = y;
-});
+}
+
+// ======================
+// RAF SCROLL
+// ======================
+let ticking = false;
+
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      update();
+    });
+  }
+}, { passive: true });
 
 // ======================
 // INIT
 // ======================
 function init() {
   updateHeaderHeight();
-  syncFloatingHeaderOffsets();
+  syncOffsets();
   hideInstant();
+
   lastScroll = window.pageYOffset;
+  update();
 }
 
 document.addEventListener('DOMContentLoaded', init);
@@ -171,82 +217,8 @@ window.addEventListener('load', init);
 
 window.addEventListener('resize', () => {
   updateHeaderHeight();
-  syncFloatingHeaderOffsets();
-});
-
-// ======================
-// TEXT COLLAPSE SYSTEM
-// ======================
-const TEXT_COLLAPSE_HEIGHTS = 2;
-const textBlocks = document.querySelectorAll('.hide_text_on_scroll');
-
-let textCollapsed = false;
-let lastScrollText = window.pageYOffset;
-
-// ======================
-// COLLAPSE
-// ======================
-function collapseHeaderText() {
-  if (textCollapsed) return;
-  textCollapsed = true;
-
-  textBlocks.forEach(el => {
-    el.classList.add('collapsed');
-  });
-}
-
-// ======================
-// EXPAND
-// ======================
-function expandHeaderText() {
-  if (!textCollapsed) return;
-  textCollapsed = false;
-
-  textBlocks.forEach(el => {
-    el.classList.remove('collapsed');
-  });
-}
-
-// ======================
-// SCROLL LOGIC (ZONE = 2 HEADER HEIGHTS)
-// ======================
-function handleTextScroll() {
-  const y = window.pageYOffset;
-  const delta = y - lastScrollText;
-
-  const zone = headerHeight * TEXT_COLLAPSE_HEIGHTS;
-
-  // TOP → always expanded
-  if (y <= 0) {
-    expandHeaderText();
-    lastScrollText = y;
-    return;
-  }
-
-  // INSIDE ZONE → reactive
-  if (y < zone) {
-    if (delta > 0) collapseHeaderText();
-    else if (delta < 0) expandHeaderText();
-
-    lastScrollText = y;
-    return;
-  }
-
-  // BELOW ZONE → always collapsed
-  collapseHeaderText();
-
-  lastScrollText = y;
-}
-
-// ======================
-// INIT HOOKS (ВСТАВЬ В ОБЩИЙ INIT)
-// ======================
-window.addEventListener('scroll', handleTextScroll, { passive: true });
-
-window.addEventListener('load', handleTextScroll);
-
-window.addEventListener('resize', () => {
-  handleTextScroll();
+  syncOffsets();
+  update();
 });
 
 // Настройки слайдеров. Добавить для нужной картинки id="slider1" (slider2, slider3 и т.д.)
