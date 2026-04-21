@@ -18,7 +18,7 @@ Object.assign(floatingHeader.style, {
   left: '0',
   right: '0',
   top: '0',
-  transform: 'translate3d(0,-100%,0)',
+  transform: 'translate3d(0,-110%,0)',
   transition: 'none',
   willChange: 'transform',
   pointerEvents: 'auto'
@@ -131,7 +131,7 @@ function update() {
     isVisible = false;
 
     floatingHeader.style.transition = 'none';
-    floatingHeader.style.transform = 'translate3d(0,-100%,0)';
+    floatingHeader.style.transform = 'translate3d(0,-110%,0)';
 
     expandText();
 
