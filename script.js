@@ -111,7 +111,24 @@ function collapseText() {
   textCollapsed = true;
 
   textBlocks.forEach(el => {
+    if (el.dataset.collapsing === '1') return;
+    el.dataset.collapsing = '1';
+
     el.classList.add('collapsed');
+
+    const onEnd = (e) => {
+      if (e.propertyName !== 'max-height') return;
+
+      // 🔥 полностью убираем из layout
+      if (textCollapsed) {
+        el.style.display = 'none';
+      }
+
+      el.dataset.collapsing = '0';
+      el.removeEventListener('transitionend', onEnd);
+    };
+
+    el.addEventListener('transitionend', onEnd);
   });
 
   headerBlocks.forEach(el => {
@@ -129,7 +146,6 @@ function collapseText() {
     el.style.alignItems = 'center';
   });
 }
-
 function expandText() {
   const now = performance.now();
   if (!textCollapsed || now - lastTextAction < TEXT_DEBOUNCE) return;
@@ -138,7 +154,15 @@ function expandText() {
   textCollapsed = false;
 
   textBlocks.forEach(el => {
-    el.classList.remove('collapsed');
+    if (el.dataset.collapsing === '1') return;
+
+    // 🔥 сначала возвращаем в layout
+    el.style.display = 'block';
+
+    // следующий кадр — чтобы браузер успел пересчитать layout
+    requestAnimationFrame(() => {
+      el.classList.remove('collapsed');
+    });
   });
 
   headerBlocks.forEach(el => {
