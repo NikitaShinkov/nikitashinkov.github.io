@@ -198,7 +198,7 @@ function expandText() {
 
   contactsBlocks.forEach(el => {
     el.style.transition = `gap ${ANIMATION_SPEED}s ${EASING}`;
-    el.style.gap = '10px';
+    el.style.gap = '4px';
   });
 
   rowMainBlocks.forEach(el => {
