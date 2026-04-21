@@ -138,21 +138,26 @@ h2 {
   text-box: normal !important;
 
   overflow: hidden;
-  max-height: 200px;
+
+  max-height: none; /* важно: убираем фикс 200px */
   opacity: 1;
 
   transform-origin: top;
 
-  transition: none;
   will-change: max-height, opacity;
+  backface-visibility: hidden;
+
+  transition: none;
 }
 
+/* состояние свернуто */
 .hide_text_on_scroll.collapsed {
-  max-height: 0 !important;
-  opacity: 0 !important;
-  margin: 0 !important;
-}
+  overflow: hidden;
 
+  /* важно: НЕ используем margin */
+  max-height: 0;
+  opacity: 0;
+}
 
 
 
