@@ -111,20 +111,28 @@ function collapseText() {
   textCollapsed = true;
 
   textBlocks.forEach(el => {
-    if (el.dataset.collapsing === '1') return;
-    el.dataset.collapsing = '1';
+    if (el.dataset.animating === '1') return;
+    el.dataset.animating = '1';
 
+    // 🔥 фиксируем текущую высоту
+    const height = el.scrollHeight;
+    el.style.height = height + 'px';
+
+    // заставляем браузер применить значение
+    el.offsetHeight;
+
+    // запускаем collapse
     el.classList.add('collapsed');
+    el.style.height = '0px';
 
     const onEnd = (e) => {
-      if (e.propertyName !== 'max-height') return;
+      if (e.propertyName !== 'height') return;
 
-      // 🔥 полностью убираем из layout
       if (textCollapsed) {
         el.style.display = 'none';
       }
 
-      el.dataset.collapsing = '0';
+      el.dataset.animating = '0';
       el.removeEventListener('transitionend', onEnd);
     };
 
@@ -154,15 +162,33 @@ function expandText() {
   textCollapsed = false;
 
   textBlocks.forEach(el => {
-    if (el.dataset.collapsing === '1') return;
+    if (el.dataset.animating === '1') return;
 
-    // 🔥 сначала возвращаем в layout
+    el.dataset.animating = '1';
+
     el.style.display = 'block';
+    el.classList.remove('collapsed');
 
-    // следующий кадр — чтобы браузер успел пересчитать layout
+    // 🔥 стартуем из 0
+    el.style.height = '0px';
+
+    // следующий кадр → до scrollHeight
     requestAnimationFrame(() => {
-      el.classList.remove('collapsed');
+      const height = el.scrollHeight;
+      el.style.height = height + 'px';
     });
+
+    const onEnd = (e) => {
+      if (e.propertyName !== 'height') return;
+
+      // 🔥 возвращаем auto после анимации
+      el.style.height = 'auto';
+
+      el.dataset.animating = '0';
+      el.removeEventListener('transitionend', onEnd);
+    };
+
+    el.addEventListener('transitionend', onEnd);
   });
 
   headerBlocks.forEach(el => {

@@ -135,22 +135,21 @@ h2 {
 
 
 .hide_text_on_scroll {
-  max-height: 200px; /* достаточно большое значение */
+  height: auto;
+  overflow: hidden;
+
   opacity: 1;
   transform: translateY(0);
 
-  overflow: hidden;
-
   transition:
-    max-height 260ms ease,
+    height 260ms ease,
     opacity 260ms ease,
     transform 260ms ease;
 
-  will-change: max-height, opacity, transform;
+  will-change: height, opacity, transform;
 }
 
 .hide_text_on_scroll.collapsed {
-  max-height: 0;
   opacity: 0;
   transform: translateY(-6px);
   pointer-events: none;
