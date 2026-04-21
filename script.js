@@ -37,6 +37,9 @@ const EXTRA_HIDE_OFFSET = 4;
 
 const TEXT_COLLAPSE_HEIGHTS = 2;
 
+const TEXT_ZONE_BUFFER = 60; // 🔥 стабилизация зоны (ВАЖНО)
+const TEXT_DEBOUNCE = 90;    // 🔥 защита от дёрганья
+
 // ======================
 // STATE
 // ======================
@@ -47,6 +50,7 @@ let upScrollAccumulated = 0;
 let isVisible = false;
 
 let textCollapsed = false;
+let lastTextAction = 0;
 
 // ======================
 // ELEMENTS
@@ -100,13 +104,17 @@ function hideInstant() {
 // TEXT + HEADER ANIMATION
 // ======================
 function collapseText() {
-  if (textCollapsed) return;
+  const now = performance.now();
+  if (textCollapsed || now - lastTextAction < TEXT_DEBOUNCE) return;
+  lastTextAction = now;
+
   textCollapsed = true;
 
   textBlocks.forEach(el => {
+    if (el.style.display === 'none') return;
+
     el.classList.add('collapsed');
 
-    // ждём завершения анимации и скрываем из layout
     const onEnd = (e) => {
       if (e.propertyName !== 'grid-template-rows') return;
 
@@ -137,11 +145,17 @@ function collapseText() {
 }
 
 function expandText() {
-  if (!textCollapsed) return;
+  const now = performance.now();
+  if (!textCollapsed || now - lastTextAction < TEXT_DEBOUNCE) return;
+  lastTextAction = now;
+
   textCollapsed = false;
 
   textBlocks.forEach(el => {
-    el.style.display = 'grid'; // сначала возвращаем в layout
+    if (el.style.display !== 'none') return;
+
+    el.style.display = 'grid';
+
     requestAnimationFrame(() => {
       el.classList.remove('collapsed');
     });
@@ -161,6 +175,7 @@ function expandText() {
     el.style.alignItems = 'flex-start';
   });
 }
+
 // ======================
 // MAIN LOOP
 // ======================
@@ -225,13 +240,17 @@ function update() {
   }
 
   // ======================
-  // TEXT ZONE LOGIC
+  // TEXT ZONE LOGIC (FIXED)
   // ======================
-  if (y < textZone) {
-    if (delta > 0) collapseText();
-    else if (delta < 0) expandText();
-  } else {
-    collapseText();
+  const inTextZone = Math.abs(y - textZone) < TEXT_ZONE_BUFFER;
+
+  if (!inTextZone) {
+    if (y < textZone) {
+      if (delta > 0) collapseText();
+      else if (delta < 0) expandText();
+    } else {
+      collapseText();
+    }
   }
 
   lastScroll = y;
@@ -272,7 +291,6 @@ window.addEventListener('resize', () => {
   syncOffsets();
   update();
 });
-
 
 // Настройки слайдеров. Добавить для нужной картинки id="slider1" (slider2, slider3 и т.д.)
 const sliders = [
