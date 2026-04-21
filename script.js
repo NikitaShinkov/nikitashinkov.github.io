@@ -4,37 +4,33 @@ const staticHeader = document.querySelector('header');
 const body = document.body;
 
 // ======================
-// СОЗДАЁМ ДУБЛИКАТ
+// CLONE HEADER
 // ======================
 const floatingHeader = staticHeader.cloneNode(true);
 
-// важно: убираем повторяющиеся id внутри клона
-floatingHeader.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+floatingHeader.querySelectorAll('[id]').forEach(el =>
+  el.removeAttribute('id')
+);
 
-floatingHeader.style.position = 'fixed';
-floatingHeader.style.zIndex = '9999';
-floatingHeader.style.transition = 'none';
-floatingHeader.style.transform = 'translateY(-100%)';
-floatingHeader.style.pointerEvents = 'auto'; // теперь кликабельно
-
-/* отладка */
-// floatingHeader.style.background = 'rgba(255, 0, 0, 0.5)'; // красный 50%
-// floatingHeader.style.opacity = '1';
-// floatingHeader.querySelectorAll('*').forEach(el => {
-//   el.style.backgroundColor = 'transparent';
-// });
-/* конец отладки */
+Object.assign(floatingHeader.style, {
+  position: 'fixed',
+  zIndex: '9999',
+  left: '0',
+  right: '0',
+  top: '0',
+  transform: 'translate3d(0,-100%,0)',
+  transition: 'none',
+  willChange: 'transform',
+  pointerEvents: 'auto'
+});
 
 document.body.appendChild(floatingHeader);
 
 // ======================
 const SHOW_AFTER_HEIGHTS = 4;
 const SHOW_TRIGGER = 20;
-
 const ANIMATION_SPEED = 0.25;
 const EASING = 'ease-out';
-
-// запас чтобы тень не торчала
 const EXTRA_HIDE_OFFSET = 4;
 
 // ======================
@@ -43,115 +39,106 @@ let headerHeight = staticHeader.getBoundingClientRect().height;
 let hiddenOffset = 0;
 let upScrollAccumulated = 0;
 let isVisible = false;
-let isDragging = false;
 
-// ======================
-// КОПИРУЕМ ОТСТУПЫ BODY
 // ======================
 function syncFloatingHeaderOffsets() {
-  const bodyStyle = getComputedStyle(body);
+  const s = getComputedStyle(body);
 
-  const padTop = parseFloat(bodyStyle.paddingTop) || 0;
-  const padLeft = parseFloat(bodyStyle.paddingLeft) || 0;
-  const padRight = parseFloat(bodyStyle.paddingRight) || 0;
+  floatingHeader.style.top =
+    (parseFloat(s.paddingTop) || 0) + (parseFloat(s.marginTop) || 0) + 'px';
 
-  const marTop = parseFloat(bodyStyle.marginTop) || 0;
-  const marLeft = parseFloat(bodyStyle.marginLeft) || 0;
-  const marRight = parseFloat(bodyStyle.marginRight) || 0;
+  floatingHeader.style.left =
+    (parseFloat(s.paddingLeft) || 0) + (parseFloat(s.marginLeft) || 0) + 'px';
 
-  floatingHeader.style.top = `${padTop + marTop}px`;
-  floatingHeader.style.left = `${padLeft + marLeft}px`;
-  floatingHeader.style.right = `${padRight + marRight}px`;
+  floatingHeader.style.right =
+    (parseFloat(s.paddingRight) || 0) + (parseFloat(s.marginRight) || 0) + 'px';
 }
 
-// ======================
 function updateHeaderHeight() {
   headerHeight = staticHeader.getBoundingClientRect().height;
 }
 
-// ======================
-function hideHeaderInstant() {
-  floatingHeader.style.transition = 'none';
+function maxOffset() {
+  return headerHeight + EXTRA_HIDE_OFFSET;
+}
+
+function applyTransform() {
   floatingHeader.style.transform =
-    `translateY(-${headerHeight + EXTRA_HIDE_OFFSET}px)`;
+    `translate3d(0,-${hiddenOffset}px,0)`;
+}
+
+function hideInstant() {
+  hiddenOffset = maxOffset();
+  floatingHeader.style.transition = 'none';
+  applyTransform();
+  isVisible = false;
 }
 
 // ======================
+// MAIN SCROLL
+// ======================
 window.addEventListener('scroll', () => {
-  const currentScroll = window.pageYOffset;
-  const delta = currentScroll - lastScroll;
+  const y = window.pageYOffset;
+  const delta = y - lastScroll;
 
   const showLimit = SHOW_AFTER_HEIGHTS * headerHeight;
 
   // ======================
-  // ВВЕРХУ СТРАНИЦЫ
+  // TOP RESET
   // ======================
-  if (currentScroll <= 0) {
+  if (y <= 0) {
     hiddenOffset = 0;
     upScrollAccumulated = 0;
     isVisible = false;
 
-    hideHeaderInstant();
+    floatingHeader.style.transition = 'none';
+    floatingHeader.style.transform = 'translate3d(0,-100%,0)';
 
-    lastScroll = currentScroll;
+    lastScroll = y;
     return;
   }
 
+  const max = maxOffset();
+
   // ======================
-  // СКРОЛЛ ВНИЗ
+  // SCROLL DOWN → ALWAYS COLLAPSE
   // ======================
   if (delta > 0) {
     upScrollAccumulated = 0;
 
-    const maxOffset = headerHeight + EXTRA_HIDE_OFFSET;
+    // ключевое исправление:
+    // ВСЕГДА увеличиваем hiddenOffset при scroll down
+    hiddenOffset = Math.min(hiddenOffset + delta, max);
 
-    // если дубликат уже открыт или частично открыт — просто двигаем вверх
-    if (hiddenOffset < maxOffset) {
-      isDragging = true;
+    floatingHeader.style.transition = 'none';
+    applyTransform();
 
-      hiddenOffset += delta;
-
-      if (hiddenOffset > maxOffset) {
-        hiddenOffset = maxOffset;
-        isVisible = false;
-        isDragging = false;
-      }
-
-      floatingHeader.style.transition = 'none';
-      floatingHeader.style.transform =
-        `translateY(-${hiddenOffset}px)`;
+    if (hiddenOffset >= max) {
+      isVisible = false;
     }
 
-    lastScroll = currentScroll;
+    lastScroll = y;
     return;
   }
 
   // ======================
-  // СКРОЛЛ ВВЕРХ
+  // SCROLL UP → REVEAL
   // ======================
-  else if (delta < 0) {
-    const maxOffset = headerHeight + EXTRA_HIDE_OFFSET;
+  if (delta < 0) {
 
-    // если мы частично скрываем header (он "едет") — продолжаем движение вниз
-    if (hiddenOffset > 0 && hiddenOffset < maxOffset) {
-      isDragging = true;
-
-      hiddenOffset += delta; // delta отрицательный → вниз
-
-      if (hiddenOffset < 0) {
-        hiddenOffset = 0;
-      }
+    // если header частично скрыт — продолжаем движение
+    if (hiddenOffset > 0) {
+      hiddenOffset = Math.max(0, hiddenOffset + delta);
 
       floatingHeader.style.transition = 'none';
-      floatingHeader.style.transform =
-        `translateY(-${hiddenOffset}px)`;
+      applyTransform();
 
-      lastScroll = currentScroll;
+      lastScroll = y;
       return;
     }
 
     // обычное появление
-    if (currentScroll > showLimit) {
+    if (y > showLimit) {
       upScrollAccumulated += Math.abs(delta);
 
       if (!isVisible && upScrollAccumulated >= SHOW_TRIGGER) {
@@ -161,35 +148,31 @@ window.addEventListener('scroll', () => {
         floatingHeader.style.transition =
           `transform ${ANIMATION_SPEED}s ${EASING}`;
 
-        floatingHeader.style.transform = 'translateY(0)';
+        floatingHeader.style.transform = 'translate3d(0,0,0)';
       }
     }
-
-    lastScroll = currentScroll;
   }
 
-  lastScroll = currentScroll;
+  lastScroll = y;
 });
 
 // ======================
-// ИНИЦИАЛИЗАЦИЯ
+// INIT
 // ======================
-document.addEventListener('DOMContentLoaded', () => {
+function init() {
   updateHeaderHeight();
   syncFloatingHeaderOffsets();
-  hideHeaderInstant();
-});
+  hideInstant();
+  lastScroll = window.pageYOffset;
+}
 
-window.addEventListener('load', () => {
-  updateHeaderHeight();
-  syncFloatingHeaderOffsets();
-});
+document.addEventListener('DOMContentLoaded', init);
+window.addEventListener('load', init);
 
 window.addEventListener('resize', () => {
   updateHeaderHeight();
   syncFloatingHeaderOffsets();
 });
-
 
 // ======================
 // СХЛОПЫВАНИЕ ТЕКСТА В HEADER
