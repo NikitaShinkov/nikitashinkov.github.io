@@ -111,21 +111,7 @@ function collapseText() {
   textCollapsed = true;
 
   textBlocks.forEach(el => {
-    if (el.style.display === 'none') return;
-
     el.classList.add('collapsed');
-
-    const onEnd = (e) => {
-      if (e.propertyName !== 'grid-template-rows') return;
-
-      if (textCollapsed) {
-        el.style.display = 'none';
-      }
-
-      el.removeEventListener('transitionend', onEnd);
-    };
-
-    el.addEventListener('transitionend', onEnd);
   });
 
   headerBlocks.forEach(el => {
@@ -139,7 +125,7 @@ function collapseText() {
   });
 
   rowMainBlocks.forEach(el => {
-    el.style.transition = `align-items ${ANIMATION_SPEED}s ${EASING}`;
+    el.style.transition = `all ${ANIMATION_SPEED}s ${EASING}`;
     el.style.alignItems = 'center';
   });
 }
@@ -152,13 +138,7 @@ function expandText() {
   textCollapsed = false;
 
   textBlocks.forEach(el => {
-    if (el.style.display !== 'none') return;
-
-    el.style.display = 'grid';
-
-    requestAnimationFrame(() => {
-      el.classList.remove('collapsed');
-    });
+    el.classList.remove('collapsed');
   });
 
   headerBlocks.forEach(el => {
@@ -175,7 +155,6 @@ function expandText() {
     el.style.alignItems = 'flex-start';
   });
 }
-
 // ======================
 // MAIN LOOP
 // ======================

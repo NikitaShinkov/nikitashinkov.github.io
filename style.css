@@ -135,26 +135,31 @@ h2 {
 
 
 .hide_text_on_scroll {
-  display: grid;
-  grid-template-rows: 1fr;
+  max-height: 200px; /* достаточно большое значение */
+  opacity: 1;
+  transform: translateY(0);
 
   overflow: hidden;
-  transition: grid-template-rows 260ms ease, opacity 260ms ease;
-  will-change: grid-template-rows, opacity;
+
+  transition:
+    max-height 260ms ease,
+    opacity 260ms ease,
+    transform 260ms ease;
+
+  will-change: max-height, opacity, transform;
 }
 
 .hide_text_on_scroll.collapsed {
-  grid-template-rows: 0fr;
+  max-height: 0;
   opacity: 0;
+  transform: translateY(-6px);
   pointer-events: none;
 }
 
-/* ВАЖНО: внутренний wrapper */
 .hide_text_on_scroll > * {
   min-height: 0;
   text-box: initial !important;
 }
-
 
 
 .profile_info {
@@ -493,6 +498,18 @@ h2 {
     font-size: 12px;
   }
 
+  .text_block, .text_block_main {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .text_block .project_page{
+    display: flex;
+    gap: 13px;
+  }
+
+
 
   .profile_main{
     padding: 16px 0 16px;
@@ -710,17 +727,6 @@ h2 {
   .profile_contacts {
     flex-direction: row;
     gap: 8px;
-  }
-
-  .text_block, .text_block_main {
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
-
-  .text_block .project_page{
-    display: flex;
-    gap: 13px;
   }
 
   .profile_contacts.project_page{
