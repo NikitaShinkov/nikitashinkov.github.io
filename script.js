@@ -195,50 +195,147 @@ window.addEventListener('resize', () => {
 // СХЛОПЫВАНИЕ ТЕКСТА В HEADER
 // ======================
 
-const TEXT_COLLAPSE_DISTANCE = 120;
+// зона срабатывания = 2 высоты header
+const TEXT_COLLAPSE_HEIGHTS = 2;
+
+// сворачивание
+const TEXT_COLLAPSE_DURATION = 280; // ms
+const TEXT_COLLAPSE_EASING = 'ease';
+
+// раскрытие
+const TEXT_EXPAND_DURATION = 320; // ms
+const TEXT_EXPAND_EASING = 'ease';
+
+// --------------------------------
 
 const textBlocks = document.querySelectorAll('.hide_text_on_scroll');
 
-function updateHeaderTextCollapse() {
-  const y = window.pageYOffset;
+let textCollapsed = false;
 
-  const progress = Math.min(y / TEXT_COLLAPSE_DISTANCE, 1);
+// применяем transition
+function applyTextTransition(duration, easing) {
+  textBlocks.forEach(el => {
+    el.style.transition = `
+      max-height ${duration}ms ${easing},
+      opacity ${duration}ms ${easing},
+      margin ${duration}ms ${easing}
+    `;
+  });
+}
+
+// свернуть
+function collapseHeaderText() {
+  if (textCollapsed) return;
+
+  textCollapsed = true;
+
+  applyTextTransition(
+    TEXT_COLLAPSE_DURATION,
+    TEXT_COLLAPSE_EASING
+  );
+
+  textBlocks.forEach(el => {
+    el.classList.add('collapsed');
+    el.style.maxHeight = '0px';
+    el.style.opacity = '0';
+  });
+
+  syncHeaderAfterTextChange(TEXT_COLLAPSE_DURATION);
+}
+
+// раскрыть
+function expandHeaderText() {
+  if (!textCollapsed) return;
+
+  textCollapsed = false;
+
+  applyTextTransition(
+    TEXT_EXPAND_DURATION,
+    TEXT_EXPAND_EASING
+  );
 
   textBlocks.forEach(el => {
     const fullHeight = el.scrollHeight;
 
-    if (progress >= 1) {
-      el.classList.add('collapsed');
-      el.style.maxHeight = '0px';
-      el.style.opacity = '0';
-    } else {
-      el.classList.remove('collapsed');
-      el.style.maxHeight = `${fullHeight * (1 - progress)}px`;
-      el.style.opacity = `${1 - progress}`;
-    }
+    el.classList.remove('collapsed');
+    el.style.maxHeight = `${fullHeight}px`;
+    el.style.opacity = '1';
   });
 
-  updateHeaderHeight();
-
-  const maxOffset = headerHeight + EXTRA_HIDE_OFFSET;
-
-  if (hiddenOffset > maxOffset) {
-    hiddenOffset = maxOffset;
-  }
-
-  if (!isVisible) {
-    floatingHeader.style.transform =
-      `translateY(-${hiddenOffset}px)`;
-  }
-
-  syncFloatingHeaderOffsets();
+  syncHeaderAfterTextChange(TEXT_EXPAND_DURATION);
 }
 
+// синхронизация высоты header во время анимации
+function syncHeaderAfterTextChange(duration) {
+  const start = performance.now();
 
-window.addEventListener('scroll', updateHeaderTextCollapse, { passive: true });
-window.addEventListener('load', updateHeaderTextCollapse);
-window.addEventListener('resize', updateHeaderTextCollapse);
+  function frame(now) {
+    updateHeaderHeight();
 
+    const maxOffset = headerHeight + EXTRA_HIDE_OFFSET;
+
+    if (hiddenOffset > maxOffset) {
+      hiddenOffset = maxOffset;
+    }
+
+    if (!isVisible) {
+      floatingHeader.style.transform =
+        `translateY(-${hiddenOffset}px)`;
+    }
+
+    syncFloatingHeaderOffsets();
+
+    if (now - start < duration + 50) {
+      requestAnimationFrame(frame);
+    }
+  }
+
+  requestAnimationFrame(frame);
+}
+
+// проверка зоны
+function updateHeaderTextCollapse() {
+  const y = window.pageYOffset;
+  const delta = y - lastScroll;
+
+  const triggerDistance =
+    headerHeight * TEXT_COLLAPSE_HEIGHTS;
+
+  // выше зоны — всегда раскрыт
+  if (y <= 0) {
+    expandHeaderText();
+    return;
+  }
+
+  // внутри зоны
+  if (y < triggerDistance) {
+    if (delta > 0) {
+      collapseHeaderText(); // вниз
+    } else if (delta < 0) {
+      expandHeaderText();   // вверх
+    }
+    return;
+  }
+
+  // ниже зоны — всегда свернут
+  collapseHeaderText();
+}
+
+// init
+window.addEventListener(
+  'scroll',
+  updateHeaderTextCollapse,
+  { passive: true }
+);
+
+window.addEventListener('load', () => {
+  updateHeaderTextCollapse();
+});
+
+window.addEventListener('resize', () => {
+  updateHeaderHeight();
+  updateHeaderTextCollapse();
+});
 
 // Настройки слайдеров. Добавить для нужной картинки id="slider1" (slider2, slider3 и т.д.)
 const sliders = [
